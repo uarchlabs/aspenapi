@@ -1,14 +1,7 @@
-// ===================================================================
-// SPDX-License-Identifier: Apache-2.0
-// Copyright (c) 2026 Jeff Nye, uarchlabs.com
-// SPDX-FileCopyrightText: 2026 Jeff Nye <jeff@uarchlabs.com>
-// ===================================================================
 #pragma once
 #include <vector>
 #include <string>
-#ifndef Q_MOC_RUN
-#include <boost/algorithm/string.hpp>
-#endif
+#include "strutil.h"
 namespace aspen
 {
 struct Pcode
@@ -25,7 +18,7 @@ struct Pcode
   std::string plainText()
   {
     
-    return boost::join(lines,"\n");
+    return joinStrings(lines,"\n");
   }
  
   std::vector<std::string> lines;

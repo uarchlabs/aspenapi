@@ -5,3 +5,5 @@ obj/*
 utils/bin
 utils/lib
 utils/obj
+
+versions/*

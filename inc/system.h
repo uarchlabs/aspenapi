@@ -1,8 +1,3 @@
-// ===================================================================
-// SPDX-License-Identifier: Apache-2.0
-// Copyright (c) 2026 Jeff Nye, uarchlabs.com
-// SPDX-FileCopyrightText: 2026 Jeff Nye <jeff@uarchlabs.com>
-// ===================================================================
 #pragma once
 #include "json/json.h"
 #include "machine.h"
@@ -68,7 +63,7 @@ struct System
   std::vector<Nvt> userData;
   std::map<std::string,Nvt> defines;
   std::map<std::string,std::string> files;
-  //hierarchy is a placeholder, will be boost graph object
+  //hierarchy is a placeholder, will be a graph object
   std::vector<uint32_t> hierarchy;
   std::map<std::string,Pin> pins;
   std::map<std::string,Memory> memories;

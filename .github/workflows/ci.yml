@@ -1,0 +1,23 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Create build directories
+        run: mkdir -p obj lib bin utils/obj utils/lib utils/bin
+
+      - name: Build utils
+        run: make -C utils
+
+      - name: Build library and run tests
+        run: make

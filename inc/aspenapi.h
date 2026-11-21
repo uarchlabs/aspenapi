@@ -1,8 +1,3 @@
-// ===================================================================
-// SPDX-License-Identifier: Apache-2.0
-// Copyright (c) 2026 Jeff Nye, uarchlabs.com
-// SPDX-FileCopyrightText: 2026 Jeff Nye <jeff@uarchlabs.com>
-// ===================================================================
 #pragma once
 #include "str.h"
 #include "amsg.h"
@@ -15,8 +10,7 @@
 #include <iostream>
 #include <sys/stat.h>
 #ifndef Q_MOC_RUN
-#include <boost/dynamic_bitset.hpp>
-#include <boost/lexical_cast.hpp>
+#include "strutil.h"
 #endif
 // ------------------------------------------------------------------
 #define TR_EN 0
@@ -73,8 +67,8 @@ struct sort_as_mnemonic
     uint32_t s1i,s2i;
 
     try {
-      s1i = boost::lexical_cast<uint32_t>(s1a);
-      s2i = boost::lexical_cast<uint32_t>(s2a);
+      s1i = aspen::toU32(s1a);
+      s2i = aspen::toU32(s2a);
       return (s1i < s2i);
     } catch(std::exception&) {
       return (s1 < s2);
@@ -97,8 +91,8 @@ struct sort_register_names
     uint32_t s1i,s2i;
 
     try {
-      s1i = boost::lexical_cast<uint32_t>(s1a);
-      s2i = boost::lexical_cast<uint32_t>(s2a);
+      s1i = aspen::toU32(s1a);
+      s2i = aspen::toU32(s2a);
       return (s1i < s2i);
     } catch(std::exception&) {
       return (s1.name < s2.name);
@@ -153,7 +147,7 @@ struct AspenApi
   // -----------------------------------------------------------------
   bool disassembleStr(Machine&,std::string&,InsDisInfo&);
   bool getDisassemblyValues(Machine&,Instruction&,std::string&,InsDisInfo&);
-  bool disassembleIword(Machine&,boost::dynamic_bitset<>&,
+  bool disassembleIword(Machine&,const std::string&,
                         std::vector<InsDisInfo>&);
   std::string formatInsDisInfo(std::vector<InsDisInfo>&);
   std::string formatInsDisInfo(std::vector<InsDisInfo>&,bool);

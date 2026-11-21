@@ -1,8 +1,3 @@
-# ===================================================================
-# SPDX-License-Identifier: Apache-2.0
-# Copyright (c) 2026 Jeff Nye, uarchlabs.com
-# SPDX-FileCopyrightText: 2026 Jeff Nye <jeff@uarchlabs.com>
-# ===================================================================
 .PHONY: run clean default lib
 # ------------------------------------------------------------------
 include ../Vars.mk
@@ -26,22 +21,19 @@ TST_OBJS   = $(TST_OBJ) $(STR_OBJ) $(MSG_OBJ)
 TST_TARGET = ./bin/tst
 # ------------------------------------------------------------------
 LIBS   = $(LIB)
-INCS = -I./inc -I$(BOOST_INC)
+INCS = -I./inc
 # ------------------------------------------------------------------
 default: $(LIB) $(TST_TARGET)
 only: $(LIB)
 # ------------------------------------------------------------------
 ./obj/%.o: ./src/%.cpp
-	@mkdir -p obj
 	$(CPP) -c $(CPPFLAGS) $(INCS) -o $@ $<
 # ------------------------------------------------------------------
 $(LIB): 	$(MSG_OBJ) $(STR_OBJ)
-	@mkdir -p lib
 	$(AR) rcs $@ $^
 
 # ------------------------------------------------------------------
 $(TST_TARGET):	$(TST_OBJS)
-	@mkdir -p bin
 	$(CPP) $(LDFLAGS) -o $@ $^ $(LIBS)
 # ------------------------------------------------------------------
 run:	$(TST_TARGET)

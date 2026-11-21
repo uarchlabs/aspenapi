@@ -1,19 +1,14 @@
-// ===================================================================
-// SPDX-License-Identifier: Apache-2.0
-// Copyright (c) 2026 Jeff Nye, uarchlabs.com
-// SPDX-FileCopyrightText: 2026 Jeff Nye <jeff@uarchlabs.com>
-// ===================================================================
 #include "aspenapi.h"
 #include "str.h"
 #include "system.h"
 #include <iostream>
 #include <cstdlib>
+#include <cmath>
 #include <vector>
 #include <utility>
 #include <string>
 
 using namespace std;
-using namespace boost;
 namespace aspen
 {
 // -----------------------------------------------------------------
@@ -28,10 +23,11 @@ bool AspenApi::testJsObj(Json::Value::iterator &p,std::string s)
 // and therefore return a single value, or supply a mask and make
 // multiple calls to disassembleStr() and return a vector
 // -----------------------------------------------------------------
-bool AspenApi::disassembleIword(Machine &m,dynamic_bitset<> &bits,
+// bits is the instruction word as a string of '0' and '1', MSB first.
+bool AspenApi::disassembleIword(Machine &m,const string &bits,
                                 vector<InsDisInfo> &v)
 {
-  string s; to_string(bits,s);
+  string s = bits;
   InsDisInfo info;
   bool ok = disassembleStr(m,s,info);
   v.push_back(info);

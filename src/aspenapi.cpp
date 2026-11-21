@@ -1,8 +1,3 @@
-// ===================================================================
-// SPDX-License-Identifier: Apache-2.0
-// Copyright (c) 2026 Jeff Nye, uarchlabs.com
-// SPDX-FileCopyrightText: 2026 Jeff Nye <jeff@uarchlabs.com>
-// ===================================================================
 #include "aspenapi.h"
 #include "system.h"
 #include <string>
@@ -13,11 +8,7 @@
 #include <set>
 #include <map>
 #include <vector>
-#ifndef Q_MOC_RUN
-#include <boost/algorithm/string.hpp>
-#include <boost/lexical_cast.hpp>
-#endif
-#define lexyui(s) boost::lexical_cast<uint32_t>(s)
+#include "strutil.h"
 // -----------------------------------------------------------------
 //using namespace aspen;
 using namespace std;
@@ -454,10 +445,7 @@ bool AspenApi::updateEncoding(System &s,Machine &m,Instruction &ins)
     return false;
   }
 
-  vector<string> splitVec;
-  boost::split(splitVec,ins.encoding.fieldString,
-               boost::is_any_of(","),
-               boost::token_compress_on);
+  vector<string> splitVec = splitAnyOf(ins.encoding.fieldString,",");
 
   uint32_t encPos = ins.encoding.width-1;
   for(size_t i=0;i<splitVec.size();++i) {
@@ -713,7 +701,7 @@ bool AspenApi::expandSyntax(Machine &m,Instruction &ins)
   if(explicitUnit) {
     pos1 = textNames.find("%U ");
     try {
-      string units = "(" + boost::join(ins.funcUnits,",") + ")";
+      string units = "(" + joinStrings(ins.funcUnits,",") + ")";
       textNames.replace(pos1,2,units);
       textTypes.replace(pos1,2,units);
     } catch(std::exception&) {
@@ -762,15 +750,9 @@ bool AspenApi::expandSyntax(Machine &m,Instruction &ins)
     textTypes.replace(pos1,pos2-pos1+1,erName);
   }
 
-  vector<string> namesvec;
-  boost::split(namesvec,textNames,
-               boost::is_any_of(" "),
-               boost::token_compress_on);
+  vector<string> namesvec = splitAnyOf(textNames," ");
 
-  vector<string> typesvec;
-  boost::split(typesvec,textTypes,
-               boost::is_any_of(" "),
-               boost::token_compress_on);
+  vector<string> typesvec = splitAnyOf(textTypes," ");
 
   if(namesvec.size() > 1) textNames = formSyntaxString(namesvec,explicitUnit);
   if(typesvec.size() > 1) textTypes = formSyntaxString(typesvec,explicitUnit);

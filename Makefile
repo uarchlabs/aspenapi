@@ -1,13 +1,9 @@
-# ===================================================================
-# SPDX-License-Identifier: Apache-2.0
-# Copyright (c) 2026 Jeff Nye, uarchlabs.com
-# SPDX-FileCopyrightText: 2026 Jeff Nye <jeff@uarchlabs.com>
-# ===================================================================
+# ----------------------------------------------------------------
 .PHONY: default test only
 # ---------------------------------------------------------------------
 include ./Vars.mk
 # ---------------------------------------------------------------------
-INCS = -I./inc $(UTILS_INC) $(BOOST_INC)
+INCS = -I./inc $(UTILS_INC)
 LIBS = $(UTILS_LIB) $(API_LIB)
 # ---------------------------------------------------------------------
 ALL_SRC = $(wildcard ./src/*.cpp)
@@ -23,24 +19,18 @@ ALL_DEP = $(ALL_OBJ:.o=.d)
 LIB_TARGET = lib/libaspenapi.a
 AIR_TARGET = bin/a2ir
 # ---------------------------------------------------------------------
-default: utils_lib $(LIB_TARGET) $(AIR_TARGET) test
+default: $(LIB_TARGET) $(AIR_TARGET) test
 
 lib:  $(LIB_TARGET)
 only: $(LIB_TARGET)
 
-utils_lib:
-	$(MAKE) -C utils
-
 obj/%.o: src/%.cpp
-	@mkdir -p obj
 	$(CPP) $(CPPFLAGS) $(INCS) -c -o $@ $<
 
 $(LIB_TARGET): $(LIB_OBJ) 
-	@mkdir -p lib
 	$(AR) rcs $@ $(LIB_OBJ)
 
 $(AIR_TARGET): $(AIR_OBJ) $(LIB_TARGET)
-	@mkdir -p bin
 	$(CPP) $(CPPFLAGS) -o $@ $^ $(LIBS)
 
 test: $(AIR_TARGET)
@@ -49,5 +39,4 @@ test: $(AIR_TARGET)
 -include $(ALL_DEP)
 
 clean: 
-	$(MAKE) -C utils clean
 	-rm -f core bin/* obj/* lib/* ./test/my-alt0.json

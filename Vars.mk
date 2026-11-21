@@ -1,8 +1,6 @@
 # ------------------------------------------------------------------
 BLD_ENV=ubuntu
 MK=make
-BOOST_INC=-I/usr/include
-BOOST_LIB=-L/usr/lib/x86_64-linux-gnu
 # ------------------------------------------------------------------
 AR=ar
 BISON = bison -d -r solved -y -v

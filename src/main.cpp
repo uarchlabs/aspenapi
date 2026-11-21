@@ -1,8 +1,5 @@
-// ===================================================================
-// SPDX-License-Identifier: Apache-2.0
-// Copyright (c) 2026 Jeff Nye, uarchlabs.com
-// SPDX-FileCopyrightText: 2026 Jeff Nye <jeff@uarchlabs.com>
-// ===================================================================
+// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 #include "aspenapi.h"
 #include "system.h"
 #include "changelog.h"
@@ -265,7 +262,7 @@ bool testDisassembly(aspen::AspenApi &api)
 //  dis = api.disassembleStr(mach,OPC_BEQ_16b_153);
 //  dumpDisInfo(dis);
 
-  typedef boost::dynamic_bitset<> bitset_t;
+  typedef std::string bitset_t;  // instruction word as '0'/'1', MSB first
   vector<bitset_t> bsv;
 
   bsv.push_back(bitset_t(string("0101011101110000"))); // MVKU R7,0x0
@@ -297,7 +294,6 @@ bool testDisassembly(aspen::AspenApi &api)
 
   for(bitset_t &bs : bsv) {
 //    string s;
-//    boost::to_string(bs,s);
 //    InsDisInfo dis = api.disassembleStr(mach,s);
 //    dumpDisInfo(dis);
 

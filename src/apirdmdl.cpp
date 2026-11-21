@@ -1,8 +1,3 @@
-// ===================================================================
-// SPDX-License-Identifier: Apache-2.0
-// Copyright (c) 2026 Jeff Nye, uarchlabs.com
-// SPDX-FileCopyrightText: 2026 Jeff Nye <jeff@uarchlabs.com>
-// ===================================================================
 #include "aspenapi.h"
 #include "system.h"
 #include "timing.h"
@@ -16,13 +11,10 @@
 #include <typeinfo>
 #include <algorithm>
 #include <map>
-#ifndef Q_MOC_RUN
-#include <boost/algorithm/string.hpp>
-#include <boost/lexical_cast.hpp>
-#endif
+#include "strutil.h"
 // -----------------------------------------------------------------
 // -----------------------------------------------------------------
-#define lexyi(s) boost::lexical_cast<uint32_t>(s)
+#define lexyi(s) aspen::toU32(s)
 // -----------------------------------------------------------------
 // -----------------------------------------------------------------
 using namespace std;
@@ -1016,9 +1008,7 @@ bool AspenApi::rdMdlMachineRegisterFiles(Machine &m,Json::Value::iterator q)
       return false;
     }
 
-    std::vector<std::string> splitVec;
-    boost::split(splitVec,rlist,boost::is_any_of(","),
-                 boost::token_compress_on);
+    std::vector<std::string> splitVec = aspen::splitAnyOf(rlist,",");
 
     for(size_t i=0;i<splitVec.size();++i) {
 
