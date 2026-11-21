@@ -1,0 +1,5341 @@
+{
+  "-changelog" : 
+  {
+    "0_entry" : 
+    {
+      "author" : "Jeff Nye",
+      "comment" : "initial version",
+      "date" : "2017.09.11"
+    }
+  },
+  "-fileformat" : 
+  {
+    "format" : "ASPEN_MDL",
+    "version" : "0.0.1",
+    "writtenby" : "AspenApi v0.0.1"
+  },
+  "machines" : 
+  [
+    {
+      "-config" : "all",
+      "-name" : "atsobel",
+      "-version" : "0.0.1",
+      "actions" : 
+      {
+        "BR" : "",
+        "BR[REL]" : "",
+        "LDB[+]" : "",
+        "LDH[+]" : "",
+        "LDW[+]" : "",
+        "NOP" : "",
+        "STB[+]" : "",
+        "STH[+]" : "",
+        "STW[+]" : ""
+      },
+      "encoderules" : 
+      [
+        {
+          "lsb" : 0,
+          "map" : 
+          {
+            "R0" : "5'b00000",
+            "R1" : "5'b00001",
+            "R10" : "5'b01010",
+            "R11" : "5'b01011",
+            "R12" : "5'b01100",
+            "R13" : "5'b01101",
+            "R14" : "5'b01110",
+            "R15" : "5'b01111",
+            "R16" : "5'b10000",
+            "R17" : "5'b10001",
+            "R18" : "5'b10010",
+            "R19" : "5'b10011",
+            "R2" : "5'b00010",
+            "R20" : "5'b10100",
+            "R21" : "5'b10101",
+            "R22" : "5'b10110",
+            "R23" : "5'b10111",
+            "R24" : "5'b11000",
+            "R25" : "5'b11001",
+            "R26" : "5'b11010",
+            "R27" : "5'b11011",
+            "R28" : "5'b11100",
+            "R29" : "5'b11101",
+            "R3" : "5'b00011",
+            "R30" : "5'b11110",
+            "R31" : "5'b11111",
+            "R4" : "5'b00100",
+            "R5" : "5'b00101",
+            "R6" : "5'b00110",
+            "R7" : "5'b00111",
+            "R8" : "5'b01000",
+            "R9" : "5'b01001"
+          },
+          "msb" : 4,
+          "regfile" : "CREGS",
+          "rulename" : "CREG",
+          "width" : 5
+        },
+        {
+          "lsb" : 0,
+          "map" : 
+          {
+            "C0" : "5'b00000",
+            "C1" : "5'b00001",
+            "C10" : "5'b01010",
+            "C11" : "5'b01011",
+            "C12" : "5'b01100",
+            "C13" : "5'b01101",
+            "C14" : "5'b01110",
+            "C15" : "5'b01111",
+            "C16" : "5'b10000",
+            "C17" : "5'b10001",
+            "C18" : "5'b10010",
+            "C19" : "5'b10011",
+            "C2" : "5'b00010",
+            "C20" : "5'b10100",
+            "C21" : "5'b10101",
+            "C22" : "5'b10110",
+            "C23" : "5'b10111",
+            "C24" : "5'b11000",
+            "C25" : "5'b11001",
+            "C26" : "5'b11010",
+            "C27" : "5'b11011",
+            "C28" : "5'b11100",
+            "C29" : "5'b11101",
+            "C3" : "5'b00011",
+            "C30" : "5'b11110",
+            "C31" : "5'b11111",
+            "C4" : "5'b00100",
+            "C5" : "5'b00101",
+            "C6" : "5'b00110",
+            "C7" : "5'b00111",
+            "C8" : "5'b01000",
+            "C9" : "5'b01001"
+          },
+          "msb" : 4,
+          "regfile" : "CUST",
+          "rulename" : "CUSTR",
+          "width" : 6
+        },
+        {
+          "lsb" : 0,
+          "map" : 
+          {
+            "R0" : "5'b00000",
+            "R1" : "5'b00001",
+            "R10" : "5'b01010",
+            "R11" : "5'b01011",
+            "R12" : "5'b01100",
+            "R13" : "5'b01101",
+            "R14" : "5'b01110",
+            "R15" : "5'b01111",
+            "R16" : "5'b10000",
+            "R17" : "5'b10001",
+            "R18" : "5'b10010",
+            "R19" : "5'b10011",
+            "R2" : "5'b00010",
+            "R20" : "5'b10100",
+            "R21" : "5'b10101",
+            "R22" : "5'b10110",
+            "R23" : "5'b10111",
+            "R24" : "5'b11000",
+            "R25" : "5'b11001",
+            "R26" : "5'b11010",
+            "R27" : "5'b11011",
+            "R28" : "5'b11100",
+            "R29" : "5'b11101",
+            "R3" : "5'b00011",
+            "R30" : "5'b11110",
+            "R31" : "5'b11111",
+            "R4" : "5'b00100",
+            "R5" : "5'b00101",
+            "R6" : "5'b00110",
+            "R7" : "5'b00111",
+            "R8" : "5'b01000",
+            "R9" : "5'b01001"
+          },
+          "msb" : 4,
+          "regfile" : "GPRS",
+          "rulename" : "GPR",
+          "width" : 5
+        },
+        {
+          "lsb" : 0,
+          "msb" : 15,
+          "regfile" : "SIMM",
+          "rulename" : "S16",
+          "width" : 16
+        },
+        {
+          "lsb" : 0,
+          "msb" : 15,
+          "regfile" : "UIMM",
+          "rulename" : "U16",
+          "width" : 16
+        },
+        {
+          "lsb" : 0,
+          "msb" : 25,
+          "regfile" : "UIMM",
+          "rulename" : "U26",
+          "width" : 26
+        },
+        {
+          "lsb" : 0,
+          "msb" : 4,
+          "regfile" : "UIMM",
+          "rulename" : "U5",
+          "width" : 5
+        },
+        {
+          "lsb" : 0,
+          "msb" : 7,
+          "regfile" : "UIMM",
+          "rulename" : "U8",
+          "width" : 8
+        }
+      ],
+      "instructions" : 
+      [
+        {
+          "-mnemonic" : "ADDI",
+          "-opc" : "OPC_ADDI_1",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x1[4:0],x3[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "U16",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "ADD IMM",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "2gpr_ui",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "ADD",
+          "-opc" : "OPC_ADD_0",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x3[4:0],x1[4:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "ADD",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "3gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "ANDHI",
+          "-opc" : "OPC_ANDHI_3",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x1[4:0],x3[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "U16",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "AND HIGH IMM",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "2gpr_ui",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "ANDI",
+          "-opc" : "OPC_ANDI_4",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x1[4:0],x3[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "U16",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "AND IMM",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "2gpr_ui",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "AND",
+          "-opc" : "OPC_AND_2",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x3[4:0],x1[4:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "AND",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "3gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "BEQ",
+          "-opc" : "OPC_BEQ_5",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x1[4:0],x2[4:0],x3[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "U16",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "BRANCH EQUAL",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "2gpr_ui",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "BGEU",
+          "-opc" : "OPC_BGEU_7",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x1[4:0],x2[4:0],x3[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "U16",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "BRANCH GREATER EQUAL UNSIGNED",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "2gpr_ui",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "BGE",
+          "-opc" : "OPC_BGE_6",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x1[4:0],x2[4:0],x3[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "U16",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "BRANCH GREATER EQUAL",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "2gpr_ui",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "BGTU",
+          "-opc" : "OPC_BGTU_9",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x1[4:0],x3[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "U16",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "(BGTU Pseudo op)",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "2gpr_ui",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "BGT",
+          "-opc" : "OPC_BGT_8",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x1[4:0],x3[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "U16",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "(BLT Pseudo op)",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "2gpr_ui",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "BLEU",
+          "-opc" : "OPC_BLEU_11",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x1[4:0],x3[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "U16",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "(BLEU Pseudo op)",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "2gpr_ui",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "BLE",
+          "-opc" : "OPC_BLE_10",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x1[4:0],x3[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "U16",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "(BLE Pseudo op)",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "2gpr_ui",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "BLTU",
+          "-opc" : "OPC_BLTU_13",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x1[4:0],x2[4:0],x3[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "U16",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "BRANCH LESS THAN UNSIGNED",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "2gpr_ui",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "BLT",
+          "-opc" : "OPC_BLT_12",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x1[4:0],x2[4:0],x3[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "U16",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "BRANCH LESS THAN",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "2gpr_ui",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "BNE",
+          "-opc" : "OPC_BNE_14",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x1[4:0],x2[4:0],x3[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "U16",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "BRANCH NOT EQUAL",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "2gpr_ui",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "BREAK",
+          "-opc" : "OPC_BREAK_16",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "opc[31:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : [],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "BREAKPOINT",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "nopr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "BREAK",
+          "-opc" : "OPC_BREAK_17",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "opc[26:6],x1[4:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "U5",
+              "name" : "x1"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "BREAKPOINT IMM",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "1ui",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "BRET",
+          "-opc" : "OPC_BRET_18",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "opc[31:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : [],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "BREAK RETURN",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "nopr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "BR",
+          "-opc" : "OPC_BR_15",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "opc[15:6],x1[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "U16",
+              "name" : "x1"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "BRANCH",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "1ui",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "CALLR",
+          "-opc" : "OPC_CALLR_20",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x1[4:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "CALL",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "1gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "CALL",
+          "-opc" : "OPC_CALL_19",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x1[25:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "U26",
+              "name" : "x1"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "CALL IMM",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "1ui",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "CMPEQI",
+          "-opc" : "OPC_CMPEQI_22",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x1[4:0],x3[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "U16",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "COMPARE EQUAL IMM",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "2gpr_ui",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "CMPEQ",
+          "-opc" : "OPC_CMPEQ_21",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x3[4:0],x1[4:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "COMPARE EQUAL",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "3gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "CMPGEI",
+          "-opc" : "OPC_CMPGEI_24",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x1[4:0],x3[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "U16",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "COMPARE GREATER EQUAL IMM",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "2gpr_ui",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "CMPGEUI",
+          "-opc" : "OPC_CMPGEUI_26",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x1[4:0],x3[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "U16",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "COMPARE GREATER EQUAL UNSIGNED IMM",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "2gpr_ui",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "CMPGEU",
+          "-opc" : "OPC_CMPGEU_25",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x3[4:0],x1[4:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "COMPARE GREATER EQUAL UNSIGNED",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "3gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "CMPGE",
+          "-opc" : "OPC_CMPGE_23",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x3[4:0],x1[4:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "COMPARE GREATER EQUAL",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "3gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "CMPGTI",
+          "-opc" : "OPC_CMPGTI_28",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x1[4:0],x2[4:0],x3[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "U16",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "(CMPGEI Pseudo op)",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "2gpr_ui",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "CMPGTUI",
+          "-opc" : "OPC_CMPGTUI_30",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x1[4:0],x3[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "IMMP1",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "(CMPGEUI Pseudo op)",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "2gpr_ui",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "CMPGTU",
+          "-opc" : "OPC_CMPGTU_29",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x3[4:0],x2[4:0],x1[4:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "(CMPLTU Pseudo op)",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "3gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "CMPGT",
+          "-opc" : "OPC_CMPGT_27",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x3[4:0],x2[4:0],x1[4:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "(CMPLT Pseudo op)",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "3gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "CMPLEI",
+          "-opc" : "OPC_CMPLEI_32",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x1[4:0],x3[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "IMMP1",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "(CMPLTI Pseudo op)",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "2gpr_ui",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "CMPLEUI",
+          "-opc" : "OPC_CMPLEUI_34",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x1[4:0],x3[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "IMMP1",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "(CMPLTUI Pseudo op)",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "2gpr_ui",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "CMPLEU",
+          "-opc" : "OPC_CMPLEU_33",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x3[4:0],x2[4:0],x1[4:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "(CMPGEU Pseudo op)",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "2gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "CMPLE",
+          "-opc" : "OPC_CMPLE_31",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x3[4:0],x2[4:0],x1[4:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "(CMPGE Pseudo op)",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "2gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "CMPLTI",
+          "-opc" : "OPC_CMPLTI_36",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x1[4:0],x3[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "U16",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "COMPARE LESS THAN IMM",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "2gpr_ui",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "CMPLTUI",
+          "-opc" : "OPC_CMPLTUI_38",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x1[4:0],x3[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "U16",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "COMPARE LESS THAN UNSIGNED IMM",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "2gpr_ui",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "CMPLTU",
+          "-opc" : "OPC_CMPLTU_37",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x3[4:0],x1[4:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "COMPARE LESS THAN UNSIGNED",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "3gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "CMPLT",
+          "-opc" : "OPC_CMPLT_35",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x3[4:0],x1[4:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "COMPARE LESS THAN",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "3gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "CMPNEI",
+          "-opc" : "OPC_CMPNEI_40",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x1[4:0],x3[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "U16",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "COMPARE NOT EQUAL IMM",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "2gpr_ui",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "CMPNE",
+          "-opc" : "OPC_CMPNE_39",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x3[4:0],x1[4:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "COMPARE NOT EQUAL",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "3gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "custom ",
+          "-opc" : "OPC_CUST_LDW_01",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x3[4:0],x4[4:0],opc[8:6],x1[7:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "U8",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "CUSTR",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x3"
+            },
+            {
+              "encoderule" : "CUSTR",
+              "name" : "x4"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "CI - LOAD 128b",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "ui_crc",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "custom ",
+          "-opc" : "OPC_CUST_NOP_00",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x3[4:0],x4[4:0],opc[8:6],x1[7:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "U8",
+              "name" : "x1"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "CI - NOP",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "ui_0r",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "custom ",
+          "-opc" : "OPC_CUST_PLDW_05",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x3[4:0],x4[4:0],opc[8:6],x1[7:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "U8",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "CUSTR",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "CUSTR",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "CI - PAC LOAD 128b",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "ui_cc",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "custom ",
+          "-opc" : "OPC_CUST_PSHRLDW_07",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x3[4:0],x4[4:0],opc[8:6],x1[7:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "U8",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "CUSTR",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "CUSTR",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "CI - PACK SHIFT LOAD 128b",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "ui_cc",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "custom ",
+          "-opc" : "OPC_CUST_PSTW_06",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x3[4:0],x4[4:0],opc[8:6],x1[7:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "U8",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "CUSTR",
+              "name" : "x2"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "CI - PAC STORE 128b",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "ui_c",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "custom ",
+          "-opc" : "OPC_CUST_SBL_04",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x3[4:0],x4[4:0],opc[8:6],x1[7:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "U8",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "CUSTR",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "CUSTR",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "CI - SOBEL",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "ui_cc",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "custom ",
+          "-opc" : "OPC_CUST_SHRLDW_03",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x3[4:0],x4[4:0],opc[8:6],x1[7:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "U8",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "CUSTR",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "CI - SHIFT LOAD 128b",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "ui_cr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "custom ",
+          "-opc" : "OPC_CUST_STW_02",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x3[4:0],x4[4:0],opc[8:6],x1[7:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "U8",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x3"
+            },
+            {
+              "encoderule" : "CUSTR",
+              "name" : "x4"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "CI - STORE 128b",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "ui_rrc",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "DIVU",
+          "-opc" : "OPC_DIVU_43",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x3[4:0],x1[4:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "DIVIDE UNSIGNED",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "3gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "DIV",
+          "-opc" : "OPC_DIV_42",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x3[4:0],x1[4:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "DIVIDE",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "3gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "ERET",
+          "-opc" : "OPC_ERET_44",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "opc[31:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : [],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "EXCEPTION RETURN",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "nopr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "FLUSHDA",
+          "-opc" : "OPC_FLUSHDA_46",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],opc[10:6],x1[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "U16",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "FLUSH DCACHE LINE",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "ui_gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "FLUSHD",
+          "-opc" : "OPC_FLUSHD_45",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],opc[10:6],x1[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "U16",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "FLUSH DCACHE LINE WR BACK",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "ui_gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "FLUSHI",
+          "-opc" : "OPC_FLUSHI_47",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x1[4:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "FLUSH ICACHE LINE",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "1gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "FLUSHP",
+          "-opc" : "OPC_FLUSHP_48",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "opc[31:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : [],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "FLUSH PIPELINE",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "nopr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "INITDA",
+          "-opc" : "OPC_INITDA_50",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],opc[10:6],x1[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "U16",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "INIT DCACHE LINE ADDR",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "ui_gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "INITD",
+          "-opc" : "OPC_INITD_49",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],opc[10:6],x1[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "U16",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "INIT DCACHE LINE CLR",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "ui_gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "INITI",
+          "-opc" : "OPC_INITI_51",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x1[4:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "INIT ICACHE LINE",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "1gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "JMPI",
+          "-opc" : "OPC_JMPI_53",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x1[25:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "U26",
+              "name" : "x1"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "JUMP IMM",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "1ui",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "JMP",
+          "-opc" : "OPC_JMP_52",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x1[4:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "JUMP",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "1gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "LDBIO",
+          "-opc" : "OPC_LDBIO_55",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x3[4:0],x1[4:0],x2[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "S16",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "LOAD BYTE IO",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "gpr_ui_gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "LDBUIO",
+          "-opc" : "OPC_LDBUIO_57",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x3[4:0],x1[4:0],x2[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "S16",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "LOAD BYTE UNSIGNED IO",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "gpr_ui_gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "LDBU",
+          "-opc" : "OPC_LDBU_56",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x3[4:0],x1[4:0],x2[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "S16",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "LOAD BYTE UNSIGNED",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "gpr_ui_gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "LDB",
+          "-opc" : "OPC_LDB_54",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x3[4:0],x1[4:0],x2[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "S16",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "LOAD BYTE",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "gpr_ui_gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "LDHIO",
+          "-opc" : "OPC_LDHIO_59",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x3[4:0],x1[4:0],x2[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "S16",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "LOAD HALF IO",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "gpr_ui_gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "LDHUIO",
+          "-opc" : "OPC_LDHUIO_61",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x3[4:0],x1[4:0],x2[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "S16",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "LOAD HALF UNSIGNED IO",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "gpr_ui_gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "LDHU",
+          "-opc" : "OPC_LDHU_60",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x3[4:0],x1[4:0],x2[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "S16",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "LOAD HALF UNSIGNED",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "gpr_ui_gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "LDH",
+          "-opc" : "OPC_LDH_58",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x3[4:0],x1[4:0],x2[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "S16",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "LOAD HALF",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "gpr_ui_gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "LDWIO",
+          "-opc" : "OPC_LDWIO_63",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x3[4:0],x1[4:0],x2[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "S16",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "LOAD WORD IO",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "gpr_ui_gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "LDW",
+          "-opc" : "OPC_LDW_62",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x3[4:0],x1[4:0],x2[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "S16",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "LOAD WORD",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "gpr_ui_gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "MOVHI",
+          "-opc" : "OPC_MOVHI_65",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "opc[9:6],x1{4:0],x2[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "U16",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "(ORHI Pseudo op)",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "2gpr_ui",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "MOVI",
+          "-opc" : "OPC_MOVI_66",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "opc[9:6],x1{4:0],x2[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "U16",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "(ADDI Pseudo op)",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "2gpr_ui",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "MOVUI",
+          "-opc" : "OPC_MOVUI_67",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "opc[10:6],x1{4:0],x2[14:0],x3[0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "U16",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "(ORI Pseudo op)",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "2gpr_ui",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "MOV",
+          "-opc" : "OPC_MOV_64",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2{4:0],opc[21:17],x1[4:0],opc[16:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "(ADD Pseudo op)",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "2gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "MULI",
+          "-opc" : "OPC_MULI_69",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x1[4:0],x3[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "U16",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "MULTIPLY IMM",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "2gpr_ui",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "MULXSS",
+          "-opc" : "OPC_MULXSS_70",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x3[4:0],x1[4:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "MUL EXTEND SIGNED/SIGNED",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "3gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "MULXSU",
+          "-opc" : "OPC_MULXSU_71",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x3[4:0],x1[4:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "MUL EXTEND SIGNED/UNSIGNED",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "3gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "MULXUU",
+          "-opc" : "OPC_MULXUU_72",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x3[4:0],x1[4:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "MUL EXTEND UNSIGNED/UNSIGNED",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "3gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "MUL",
+          "-opc" : "OPC_MUL_68",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x3[4:0],x1[4:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "MULTIPLY",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "3gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "NEXTPC",
+          "-opc" : "OPC_NEXTPC_73",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "opc[26:17],x1[4:0],opc[16:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "ADDR OF NEXT INSTR",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "1gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "NOP",
+          "-opc" : "OPC_NOP_74",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "opc[31:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "(ADD Pseudo op)",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "3gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "NOR",
+          "-opc" : "OPC_NOR_75",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x3[4:0],x1[4:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "NOR",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "3gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "ORHI",
+          "-opc" : "OPC_ORHI_77",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x1[4:0],x3[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "U16",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "OR HIGH IMM",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "2gpr_ui",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "ORI",
+          "-opc" : "OPC_ORI_78",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x1[4:0],x3[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "U16",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "OR IMM",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "2gpr_ui",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "OR",
+          "-opc" : "OPC_OR_76",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x3[4:0],x1[4:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "OR",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "3gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "RDCTL",
+          "-opc" : "OPC_RDCTL_79",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "opc[21:12],x1[4:0],opc[11:6],x2[4:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "CREGS",
+              "name" : "x2"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "READ CNTRL REG",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "gpr_creg",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "RDPRS",
+          "-opc" : "OPC_RDPRS_80",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x1[4:0],x3[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "U16",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "READ PREV REGISTER SET",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "2gpr_ui",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "RET",
+          "-opc" : "OPC_RET_81",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "opc[31:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : [],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "RETURN",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "nopr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "ROLI",
+          "-opc" : "OPC_ROLI_83",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],opc[16:12],x1[4:0],opc[11:6],x3[4:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "U5",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "ROTATE LEFT IMM",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "2gpr_ui",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "ROL",
+          "-opc" : "OPC_ROL_82",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x3[4:0],x1[4:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "ROTATE LEFT",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "3gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "ROR",
+          "-opc" : "OPC_ROR_84",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x3[4:0],x1[4:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "ROTATE RIGHT",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "3gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "SLLI",
+          "-opc" : "OPC_SLLI_86",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],opc[16:12],x1[4:0],opc[11:6],x3[4:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "U5",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "SHIFT LEFT IMM",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "2gpr_ui",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "SLL",
+          "-opc" : "OPC_SLL_85",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x3[4:0],x1[4:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "SHIFT LEFT",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "3gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "SRAI",
+          "-opc" : "OPC_SRAI_88",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],opc[16:12],x1[4:0],opc[11:6],x3[4:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "U5",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "SHIFT RIGHT ARITH IMM",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "2gpr_ui",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "SRA",
+          "-opc" : "OPC_SRA_87",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x3[4:0],x1[4:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "SHIFT RIGHT ARITH",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "3gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "SRLI",
+          "-opc" : "OPC_SRLI_90",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],opc[16:12],x1[4:0],opc[11:6],x3[4:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "U5",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "SHIFT RIGHT LOGICAL IMM",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "2gpr_ui",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "SRL",
+          "-opc" : "OPC_SRL_89",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x3[4:0],x1[4:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "SHIFT RIGHT LOGICAL",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "3gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "STBIO",
+          "-opc" : "OPC_STBIO_92",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x3[4:0],x1[4:0],x2[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "S16",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "STORE BYTE IO",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "2gpr_ui",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "STB",
+          "-opc" : "OPC_STB_91",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x3[4:0],x1[4:0],x2[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "S16",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "STORE BYTE",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "2gpr_ui",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "STHIO",
+          "-opc" : "OPC_STHIO_94",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x3[4:0],x1[4:0],x2[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "S16",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "STORE HALF IO",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "2gpr_ui",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "STH",
+          "-opc" : "OPC_STH_93",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x3[4:0],x1[4:0],x2[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "S16",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "STORE HALF",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "2gpr_ui",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "STWIO",
+          "-opc" : "OPC_STWIO_96",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x3[4:0],x1[4:0],x2[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "S16",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "STORE WORD IO",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "2gpr_ui",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "STW",
+          "-opc" : "OPC_STW_95",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x3[4:0],x1[4:0],x2[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "S16",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "STORE WORD",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "2gpr_ui",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "SUBI",
+          "-opc" : "OPC_SUBI_98",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x1[4:0],x3[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "U16",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "(ADDI Pseudo op)",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "2gpr_ui",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "SUB",
+          "-opc" : "OPC_SUB_97",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x3[4:0],x1[4:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "SUBTRACT",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "3gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "SYNC",
+          "-opc" : "OPC_SYNC_99",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "opc[31:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : [],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "SYNCHRONIZE MEMORY",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "nopr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "TRAP",
+          "-opc" : "OPC_TRAP_100",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "opc[31:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : [],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "TRAP TO EXCEPT HANDLER",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "nopr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "TRAP",
+          "-opc" : "OPC_TRAP_101",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "opc[26:6],x1[4:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "U5",
+              "name" : "x1"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "TRAP W/ DEBUG INFO",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "1ui",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "WRCTL",
+          "-opc" : "OPC_WRCTL_102",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],opc[21:6],x1[4:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "CREGS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "WRITE CONTROL REGISTER",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "2gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "WRPRS",
+          "-opc" : "OPC_WRPRS_103",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "WRITE PREVIOUS REGISTER SET",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "2gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "XORHI",
+          "-opc" : "OPC_XORHI_105",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x1[4:0],x3[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "U16",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "XOR HIGH IMM",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "2gpr_ui",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "XORI",
+          "-opc" : "OPC_XORI_106",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x1[4:0],x3[15:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "U16",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "XOR IMM",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "2gpr_ui",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        },
+        {
+          "-mnemonic" : "XOR",
+          "-opc" : "OPC_XOR_104",
+          "action" : "",
+          "description" : "",
+          "encoding" : 
+          {
+            "fields" : "x2[4:0],x3[4:0],x1[4:0],opc[5:0]",
+            "width" : 32
+          },
+          "funcunits" : [],
+          "notations" : [],
+          "operands" : 
+          [
+            {
+              "encoderule" : "GPRS",
+              "name" : "x1"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x2"
+            },
+            {
+              "encoderule" : "GPRS",
+              "name" : "x3"
+            }
+          ],
+          "prefix" : "",
+          "pseudocode" : [],
+          "shortdesc" : "XOR",
+          "state" : 
+          {
+            "def" : [],
+            "use" : []
+          },
+          "suffix" : "",
+          "syntax" : "3gpr",
+          "timing" : 
+          {
+            "branchdelay" : "0",
+            "latency" : "0",
+            "loaduse" : "0",
+            "throughput" : "0"
+          }
+        }
+      ],
+      "instructionwords" : 
+      [
+        {
+          "fields" : 
+          [
+            ""
+          ],
+          "name" : "default"
+        }
+      ],
+      "memory" : 
+      [
+        {
+          "access" : "r",
+          "entries" : 0,
+          "loaddelay" : 0,
+          "name" : "IMEM",
+          "storedelay" : 0,
+          "type" : "text",
+          "width" : 32
+        },
+        {
+          "access" : "rw",
+          "entries" : 0,
+          "loaddelay" : 0,
+          "name" : "DMEM",
+          "storedelay" : 1,
+          "type" : "data",
+          "width" : 32
+        }
+      ],
+      "namedbits" : null,
+      "opcodes" : 
+      {
+        "OPC_ADDI_1" : "6'b000100",
+        "OPC_ADD_0" : "17'b11000100000111010",
+        "OPC_ANDHI_3" : "6'b101100",
+        "OPC_ANDI_4" : "6'b001100",
+        "OPC_AND_2" : "17'b00111000000111010",
+        "OPC_BEQ_5" : "6'b100110",
+        "OPC_BGEU_7" : "6'b101110",
+        "OPC_BGE_6" : "6'b001110",
+        "OPC_BGTU_9" : "6'b110110",
+        "OPC_BGT_8" : "6'b010110",
+        "OPC_BLEU_11" : "6'b101110",
+        "OPC_BLE_10" : "6'b001110",
+        "OPC_BLTU_13" : "6'b110110",
+        "OPC_BLT_12" : "6'b010110",
+        "OPC_BNE_14" : "6'b011110",
+        "OPC_BREAK_16" : "32'b00000000001111011010000000111010",
+        "OPC_BREAK_17" : "27'b000000000011110110100111010",
+        "OPC_BRET_18" : "32'b11110000000000000100100000111010",
+        "OPC_BR_15" : "16'b0000000000000110",
+        "OPC_CALLR_20" : "27'b000001111101110100000111010",
+        "OPC_CALL_19" : "6'b000000",
+        "OPC_CMPEQI_22" : "6'b100000",
+        "OPC_CMPEQ_21" : "17'b10000000000111010",
+        "OPC_CMPGEI_24" : "6'b001000",
+        "OPC_CMPGEUI_26" : "6'b101000",
+        "OPC_CMPGEU_25" : "17'b10100000000111010",
+        "OPC_CMPGE_23" : "17'b00100000000111010",
+        "OPC_CMPGTI_28" : "6'b001000",
+        "OPC_CMPGTUI_30" : "6'b101000",
+        "OPC_CMPGTU_29" : "17'b11000000000111010",
+        "OPC_CMPGT_27" : "17'b01000000000111010",
+        "OPC_CMPLEI_32" : "6'b010000",
+        "OPC_CMPLEUI_34" : "6'b110000",
+        "OPC_CMPLEU_33" : "17'b10100000000111010",
+        "OPC_CMPLE_31" : "17'b00100000000111010",
+        "OPC_CMPLTI_36" : "6'b010000",
+        "OPC_CMPLTUI_38" : "6'b110000",
+        "OPC_CMPLTU_37" : "17'b11000000000111010",
+        "OPC_CMPLT_35" : "17'b01000000000111010",
+        "OPC_CMPNEI_40" : "6'b011000",
+        "OPC_CMPNE_39" : "17'b01100000000111010",
+        "OPC_CUST_LDW_01" : "18'b10100000000 110010",
+        "OPC_CUST_NOP_00" : "18'b00000000000 110010",
+        "OPC_CUST_PLDW_05" : "18'b11000000000 110010",
+        "OPC_CUST_PSHRLDW_07" : "18'b11000000000 110010",
+        "OPC_CUST_PSTW_06" : "18'b10000000000 110010",
+        "OPC_CUST_SBL_04" : "18'b11000000000 110010",
+        "OPC_CUST_SHRLDW_03" : "18'b10000000000 110010",
+        "OPC_CUST_STW_02" : "18'b00100000000 110010",
+        "OPC_DIVU_43" : "17'b10010000000111010",
+        "OPC_DIV_42" : "17'b10010100000111010",
+        "OPC_ERET_44" : "32'b11101111100000000000100000111010",
+        "OPC_FLUSHDA_46" : "11'b00000011011",
+        "OPC_FLUSHD_45" : "11'b00000111011",
+        "OPC_FLUSHI_47" : "27'b000000000000110000000111010",
+        "OPC_FLUSHP_48" : "32'b00000000000000000010000000111010",
+        "OPC_INITDA_50" : "21'b00000010011          ",
+        "OPC_INITD_49" : "21'b00000110011          ",
+        "OPC_INITI_51" : "29'b000000000010100100000111010  ",
+        "OPC_JMPI_53" : "6'b000001",
+        "OPC_JMP_52" : "29'b000000000000110100000111010  ",
+        "OPC_LDBIO_55" : "6'b100111",
+        "OPC_LDBUIO_57" : "6'b100011",
+        "OPC_LDBU_56" : "6'b000011",
+        "OPC_LDB_54" : "6'b000111",
+        "OPC_LDHIO_59" : "6'b101111",
+        "OPC_LDHUIO_61" : "6'b101011",
+        "OPC_LDHU_60" : "6'b001011",
+        "OPC_LDH_58" : "6'b001111",
+        "OPC_LDWIO_63" : "6'b110111",
+        "OPC_LDW_62" : "6'b010111",
+        "OPC_MOVHI_65" : "11'b00000110100",
+        "OPC_MOVI_66" : "11'b00000000100",
+        "OPC_MOVUI_67" : "11'b00000010100",
+        "OPC_MOV_64" : "22'b0000011000100000111010",
+        "OPC_MULI_69" : "6'b100100",
+        "OPC_MULXSS_70" : "17'b01111100000111010",
+        "OPC_MULXSU_71" : "17'b01011100000111010",
+        "OPC_MULXUU_72" : "17'b00011100000111010",
+        "OPC_MUL_68" : "17'b10011100000111010",
+        "OPC_NEXTPC_73" : "27'b000000000001110000000111010",
+        "OPC_NOP_74" : "32'b00000000000000011000100000111010",
+        "OPC_NOR_75" : "17'b00011000000111010",
+        "OPC_ORHI_77" : "6'b110100",
+        "OPC_ORI_78" : "6'b010100",
+        "OPC_OR_76" : "17'b01011000000111010",
+        "OPC_RDCTL_79" : "22'b0000000000100110111010",
+        "OPC_RDPRS_80" : "6'b111000",
+        "OPC_RET_81" : "32'b11111000000000000010100000111010",
+        "OPC_ROLI_83" : "17'b00000000010111010",
+        "OPC_ROL_82" : "17'b00001100000111010",
+        "OPC_ROR_84" : "17'b00101100000111010",
+        "OPC_SLLI_86" : "17'b00000010010111010",
+        "OPC_SLL_85" : "17'b01001100000111010",
+        "OPC_SRAI_88" : "17'b00000111010111010",
+        "OPC_SRA_87" : "17'b11101100000111010",
+        "OPC_SRLI_90" : "17'b00000011010111010",
+        "OPC_SRL_89" : "17'b01101100000111010",
+        "OPC_STBIO_92" : "6'b100101",
+        "OPC_STB_91" : "6'b000101",
+        "OPC_STHIO_94" : "6'b101101",
+        "OPC_STH_93" : "6'b001101",
+        "OPC_STWIO_96" : "6'b110101",
+        "OPC_STW_95" : "6'b010101",
+        "OPC_SUBI_98" : "6'b000100",
+        "OPC_SUB_97" : "17'b11100100000111010",
+        "OPC_SYNC_99" : "32'b00000000000000011011000000111010",
+        "OPC_TRAP_100" : "32'b00000000001111010110100000111010",
+        "OPC_TRAP_101" : "27'b000000000011101101101111010",
+        "OPC_WRCTL_102" : "22'b0000000000101110111010",
+        "OPC_WRPRS_103" : "27'b000000110001010000000111010",
+        "OPC_XORHI_105" : "6'b111100",
+        "OPC_XORI_106" : "6'b011100",
+        "OPC_XOR_104" : "17'b01111000000111010"
+      },
+      "pins" : [],
+      "pipelines" : 
+      [
+        {
+          "graph" : "strict digraph {  node  [fontname=\"fixed\"];  ALL",
+          "length" : 0,
+          "name" : "pipe_e"
+        },
+        {
+          "graph" : "strict digraph {  node  [fontname=\"fixed\"];  F -> D  D -> E  E -> M  M -> WB",
+          "length" : 0,
+          "name" : "pipe_s"
+        },
+        {
+          "graph" : "strict digraph {  node  [fontname=\"fixed\"];  F -> D  D -> E  E -> M  M -> A  A -> WB",
+          "length" : 0,
+          "name" : "pipe_f"
+        }
+      ],
+      "properties" : [],
+      "registerfiles" : 
+      [
+        {
+          "list" : "r0,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15,r16,r17,r18,r19,r20,r21,r22,r23,r24,r25,r26,r27,r28,r29,r30,r31",
+          "name" : "GPRS",
+          "type" : "I",
+          "width" : 32
+        },
+        {
+          "list" : "c0,c1,c2,c3",
+          "name" : "CREGS",
+          "type" : "I",
+          "width" : 32
+        },
+        {
+          "list" : "status,estatus,bstatus,ienable,ipend,cpuid,reserved,exception,pteaddr,tlbacc,tlbmisc,reserved,badaddr,config,mpubase,mpuacc",
+          "name" : "CREGS",
+          "type" : "I",
+          "width" : 32
+        }
+      ],
+      "syntax" : 
+      {
+        "1gpr" : "%GPR%",
+        "1ui" : "%UIMM%",
+        "2gpr" : "%GPR% %GPR%",
+        "2gpr_ui" : "%GPR% %GPR% %UIMM%",
+        "3gpr" : "%GPR% %GPR% %GPR%",
+        "gpr_creg" : "%GPR% %CREG%",
+        "gpr_ui_gpr" : "%GPR% %UIMM% %GPR%",
+        "nopr" : "",
+        "ui_0r" : "custom %UIMM%",
+        "ui_2xr" : "%UIMM% %XRG% %XRG%",
+        "ui_c" : "custom %UIMM% %CUST%",
+        "ui_cc" : "custom %UIMM% %CUST% %CUST%",
+        "ui_cr" : "custom %UIMM% %CUST% %GPR%",
+        "ui_crc" : "custom %UIMM% %CUST% %GPR% %CUST%",
+        "ui_gpr" : "%UIMM% %GPR%",
+        "ui_rrc" : "custom %UIMM% %GPR% %GPR% %CUST%"
+      }
+    }
+  ],
+  "system" : 
+  {
+    "-info" : 
+    {
+      "-name" : "atsobel_sys",
+      "-version" : "0.0.1"
+    },
+    "defines" : [],
+    "directives" : "",
+    "files" : [],
+    "hierarchy" : "",
+    "instances" : 
+    {
+      "ats0" : "atsobel"
+    },
+    "memory" : "",
+    "pins" : [],
+    "registers" : []
+  },
+  "userdata" : []
+}
