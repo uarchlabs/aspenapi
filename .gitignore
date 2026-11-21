@@ -7,3 +7,5 @@ utils/lib
 utils/obj
 
 versions/*
+__pycache__/
+.pytest_cache/

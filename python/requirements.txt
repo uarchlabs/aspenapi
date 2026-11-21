@@ -1,0 +1,4 @@
+# Build-time tools for the ISA layer (python/aspen_isa) and their tests.
+PyYAML>=6.0
+jsonschema>=4.18
+pytest>=8

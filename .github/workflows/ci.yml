@@ -21,3 +21,32 @@ jobs:
 
       - name: Build library and run tests
         run: make
+
+  isa-layer:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Python tools
+        run: pip install -r python/requirements.txt
+
+      - name: Validate layer and ID registry
+        env:
+          BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          extra=""
+          if [ -n "$BASE" ] && git cat-file -e "$BASE:isa/ids.yaml" 2>/dev/null; then
+            git show "$BASE:isa/ids.yaml" > "$RUNNER_TEMP/ids_base.yaml"
+            extra="--ids-base $RUNNER_TEMP/ids_base.yaml"
+          fi
+          PYTHONPATH=python python -m aspen_isa validate -q $extra
+
+      - name: Tests
+        run: python -m pytest -q python/tests

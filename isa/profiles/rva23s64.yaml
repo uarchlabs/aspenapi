@@ -1,0 +1,63 @@
+# RVA23S64 instruction set, as riscv-opcodes extension files.
+#
+# The instruction set with IDs is every base entry in these files plus the
+# pseudo-ops riscv-opcodes emits into encoding.h (prefetch.*, pause, mop.*,
+# c.mop.*), so it matches what Spike decodes. Other pseudo-ops (mv, ret,
+# fmv.d, ntl.*, ...) are operand patterns of a base entry: they become layer
+# variants, not IDs.
+#
+# Optional RVA23 extensions (Zicfilp, Zicfiss, Zfh, crypto, ...) are left out.
+# A3 confirms this list against the RVA23S64 profile.
+
+format: 1
+name: rva23s64
+riscv_opcodes_commit: c1d9bdfbc92a0ac30e8870106df9f55286e6c80a
+
+extension_files:
+  scalar:
+    - rv_i
+    - rv64_i
+    - rv_m
+    - rv64_m
+    - rv_a
+    - rv64_a
+    - rv_f
+    - rv64_f
+    - rv_d
+    - rv64_d
+    - rv_c
+    - rv64_c
+    - rv_c_d
+    - rv_zicsr
+    - rv_zifencei
+    - rv_zicntr
+    - rv_zicond
+    - rv_zba
+    - rv64_zba
+    - rv_zbb
+    - rv64_zbb
+    - rv_zbs
+    - rv64_zbs
+    - rv_f_zfa
+    - rv_d_zfa
+    - rv_zfhmin
+    - rv_d_zfhmin
+    - rv_zcb
+    - rv64_zcb
+    - rv_zimop
+    - rv_zcmop
+    - rv_zawrs
+    - rv_zicbo
+    - rv_zihintntl
+    - rv_c_zihintntl
+  privileged:
+    - rv_system
+    - rv_s
+    - rv_svinval
+    - rv_h
+    - rv64_h
+    - rv_svinval_h
+  vector:
+    # Zvfhmin's conversions are in rv_v.
+    - rv_v
+    - rv_zvbb

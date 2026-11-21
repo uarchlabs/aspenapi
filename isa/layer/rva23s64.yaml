@@ -1,0 +1,496 @@
+# ===================================================================
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2026 Jeff Nye, uarchlabs.com
+# SPDX-FileCopyrightText: 2026 Jeff Nye <jeff@uarchlabs.com>
+# ===================================================================
+# AspenADL layer for RVA23S64: microarchitecture data on top of riscv-opcodes.
+#
+# A2 status: vocabularies plus example entries that exercise every schema
+# feature. A4 (scalar), A7 (vector) and A9 (operand-pattern catalogue)
+# fill in the rest. The fu_classes, tags and attribute values are a first
+# cut, to be aligned with pacino's decode.
+#
+# Latencies are not here: units specify them in Sparta parameters.
+
+format: 1
+profile: rva23s64
+
+fu_classes:
+  alu: Integer ALU
+  branch: Branches and jumps
+  mul: Integer multiply
+  div: Integer divide
+  csr: CSR access
+  load: Loads and prefetches
+  store: Stores
+  amo: Atomics
+  fence: Fences and cache-block operations
+  system: Privileged and system instructions
+  fp_add: FP add, subtract, convert
+  fp_misc: FP sign injection, moves, classify
+  vec_alu: Vector integer arithmetic
+  vec_load: Vector loads
+  vec_store: Vector stores
+  vset: Vector configuration
+
+tags:
+  # Rename and dependencies
+  move: Copies one source to the destination; candidate for move elimination
+  zero_idiom: Result is zero whatever the source values
+  constant: Result does not depend on any source register
+  no_dest: Destination is x0; nothing is written
+  nop: Does nothing architecturally
+  stack_access: Memory access based on sp (x2)
+  # Control flow
+  cond_branch: Conditional branch
+  always_taken: Conditional branch whose condition is always true
+  compare_zero: Branch comparing against x0
+  jump: Unconditional jump
+  direct: Target from the encoding
+  indirect: Target from a register
+  call: Pushes the return-address stack
+  return: Pops the return-address stack
+  # CSRs, ordering and memory
+  csr_read: Reads a CSR
+  csr_write: Writes a CSR
+  counter_read: Reads a counter CSR
+  acquire: Acquire ordering
+  release: Release ordering
+  memory_only: Fence orders memory accesses only, not I/O
+  store_load: Fence orders earlier stores before later loads
+  tlb_flush: Invalidates translations
+  tlb_all_addresses: Applies to every address
+  tlb_all_asids: Applies to every ASID
+  prefetch: Prefetch hint
+  # FP
+  dyn_rm: Rounding mode comes from frm
+  # Vector
+  masked: Vector operation masked by v0
+  segment: Vector segment access (nf > 0)
+  vtype_static: vtype comes from the immediate
+  avl_static: AVL comes from the immediate
+  vl_from_rs1: AVL comes from rs1
+  vl_max: Sets vl to VLMAX
+  vl_keep: Keeps the current vl
+
+attributes:
+  serialize:
+    type: enum
+    values: [none, rename, drain_before, flush]
+    default: none
+    description: >-
+      Pipeline effect: rename (state renamed or tracked at rename),
+      drain_before (older instructions complete first), flush (younger
+      instructions are refetched).
+  reserved:
+    type: boolean
+    default: false
+    description: Reserved encoding; decodes as illegal
+  segments_from_nf:
+    type: boolean
+    default: false
+    description: The nf field gives the vector segment count
+
+uop_patterns:
+  per_lmul: One uop per register of the LMUL group
+  per_emul_nf: One uop per register of the EMUL group, times the segment count
+
+csr_classes:
+  fp_state:
+    description: FP flags and rounding mode
+    csrs: [fflags, frm, fcsr]
+  vector_state:
+    description: Vector fixed-point and start state
+    csrs: [vstart, vxsat, vxrm, vcsr]
+  counters:
+    description: User counters
+    csrs: [cycle, time, instret]
+  translation:
+    description: Address-translation roots
+    csrs: [satp, vsatp, hgatp]
+
+rules:
+  - name: discard_rd_x0
+    when: {rd: x0}
+    add_tags: [no_dest]
+
+instructions:
+
+  # ---------------------------------------------------------------- integer
+  add:
+    fu_class: alu
+    operands:
+      rd: {role: dest, file: x}
+      rs1: {role: src, file: x}
+      rs2: {role: src, file: x}
+    variants:
+      - name: mv_rs2
+        when: {rs1: x0}
+        add_tags: [move]
+      - name: mv_rs1
+        when: {rs2: x0}
+        add_tags: [move]
+
+  addi:
+    fu_class: alu
+    operands:
+      rd: {role: dest, file: x}
+      rs1: {role: src, file: x}
+      imm12: {role: imm}
+    variants:
+      - name: mv
+        when: {imm12: 0}
+        add_tags: [move]
+      - name: li
+        when: {rs1: x0}
+        add_tags: [constant]
+      - name: li_zero
+        when: {rs1: x0, imm12: 0}
+        remove_tags: [move]
+        add_tags: [zero_idiom]
+      - name: nop
+        when: {rd: x0, rs1: x0, imm12: 0}
+        add_tags: [nop]
+
+  xor:
+    fu_class: alu
+    operands:
+      rd: {role: dest, file: x}
+      rs1: {role: src, file: x}
+      rs2: {role: src, file: x}
+    variants:
+      - name: zero
+        when: {rs2: {eq: rs1}}
+        add_tags: [zero_idiom, constant]
+      - name: mv_rs1
+        when: {rs2: x0, rs1: {not: x0}}
+        add_tags: [move]
+      - name: mv_rs2
+        when: {rs1: x0, rs2: {not: x0}}
+        add_tags: [move]
+
+  lui:
+    fu_class: alu
+    tags: [constant]
+    operands:
+      rd: {role: dest, file: x}
+      imm20: {role: imm}
+
+  auipc:
+    fu_class: alu
+    tags: [constant]
+    operands:
+      rd: {role: dest, file: x}
+      imm20: {role: imm}
+
+  mul:
+    fu_class: mul
+    notes: Value-dependent latency (multiply by zero) is a mul-unit latency model, not layer data.
+    operands:
+      rd: {role: dest, file: x}
+      rs1: {role: src, file: x}
+      rs2: {role: src, file: x}
+
+  div:
+    fu_class: div
+    notes: Early-exit latency is a div-unit latency model, not layer data.
+    operands:
+      rd: {role: dest, file: x}
+      rs1: {role: src, file: x}
+      rs2: {role: src, file: x}
+
+  # ---------------------------------------------------------------- memory
+  ld:
+    fu_class: load
+    operands:
+      rd: {role: dest, file: x}
+      rs1: {role: src, file: x}
+      imm12: {role: imm}
+    variants:
+      - when: {rs1: x2}
+        add_tags: [stack_access]
+
+  sd:
+    fu_class: store
+    operands:
+      rs1: {role: src, file: x}
+      rs2: {role: src, file: x}
+      imm12hi: {role: imm}
+      imm12lo: {role: imm}
+    variants:
+      - when: {rs1: x2}
+        add_tags: [stack_access]
+
+  amoadd_w:
+    fu_class: amo
+    notes: The uop split is an example; pacino's actual split goes here.
+    operands:
+      rd: {role: dest, file: x}
+      rs1: {role: src, file: x}
+      rs2: {role: src, file: x}
+      aq: {role: other}
+      rl: {role: other}
+    uops:
+      - {name: load, fu_class: load}
+      - {name: op, fu_class: alu}
+      - {name: store, fu_class: store}
+    variants:
+      - when: {aq: 1}
+        add_tags: [acquire]
+      - when: {rl: 1}
+        add_tags: [release]
+
+  fence:
+    fu_class: fence
+    operands:
+      fm: {role: other}
+      pred: {role: other}
+      succ: {role: other}
+      rs1: {role: src, file: x}
+      rd: {role: dest, file: x}
+    set: {serialize: drain_before}
+    variants:
+      # pred/succ bits: i=8, o=4, r=2, w=1
+      - name: memory_only
+        when: {pred: {mask: 12, value: 0}, succ: {mask: 12, value: 0}}
+        add_tags: [memory_only]
+      - name: store_load
+        when: {pred: {mask: 1, value: 1}, succ: {mask: 2, value: 2}}
+        add_tags: [store_load]
+
+  prefetch_r:
+    fu_class: load
+    tags: [prefetch, no_dest]
+    operands:
+      rs1: {role: src, file: x}
+      imm12hi: {role: imm}
+
+  # ---------------------------------------------------------------- control
+  beq:
+    fu_class: branch
+    tags: [cond_branch, direct]
+    operands:
+      rs1: {role: src, file: x}
+      rs2: {role: src, file: x}
+      bimm12hi: {role: imm}
+      bimm12lo: {role: imm}
+    variants:
+      - name: beqz
+        when: {rs2: x0}
+        add_tags: [compare_zero]
+      - name: always
+        when: {rs2: {eq: rs1}}
+        add_tags: [always_taken]
+
+  jal:
+    fu_class: branch
+    tags: [jump, direct]
+    operands:
+      rd: {role: dest, file: x}
+      jimm20: {role: imm}
+    variants:
+      - name: call
+        when: {rd: [x1, x5]}
+        add_tags: [call]
+
+  jalr:
+    fu_class: branch
+    tags: [jump, indirect]
+    notes: Return-address stack hints from the unprivileged spec, table "Return-address stack prediction hints".
+    operands:
+      rd: {role: dest, file: x}
+      rs1: {role: src, file: x}
+      imm12: {role: imm}
+    variants:
+      - name: call
+        when: {rd: [x1, x5], rs1: {not: [x1, x5]}}
+        add_tags: [call]
+      - name: call_same_link
+        when: {rd: [x1, x5], rs1: {eq: rd}}
+        add_tags: [call]
+      - name: coroutine
+        when: {rd: [x1, x5], rs1: {all: [[x1, x5], {ne: rd}]}}
+        add_tags: [return, call]
+      - name: return
+        when: {rd: {not: [x1, x5]}, rs1: [x1, x5]}
+        add_tags: [return]
+
+  # ---------------------------------------------------------------- compressed
+  c_addi4spn:
+    expands_to:
+      instruction: addi
+      operands: {rd: rd_p, rs1: x2, imm12: c_nzuimm10}
+    operands:
+      rd_p: {role: dest, file: x}
+      c_nzuimm10: {role: imm}
+    variants:
+      - name: reserved_zero_imm
+        when: {c_nzuimm10: 0}
+        set: {reserved: true}
+
+  c_mv:
+    expands_to:
+      instruction: add
+      operands: {rd: rd_n0, rs1: x0, rs2: c_rs2_n0}
+    operands:
+      rd_n0: {role: dest, file: x}
+      c_rs2_n0: {role: src, file: x}
+
+  # ---------------------------------------------------------------- CSR and system
+  csrrs:
+    fu_class: csr
+    tags: [csr_read, csr_write]
+    set: {serialize: drain_before}
+    operands:
+      rd: {role: dest, file: x}
+      rs1: {role: src, file: x}
+      csr: {role: csr}
+    variants:
+      - name: read_only
+        when: {rs1: x0}
+        remove_tags: [csr_write]
+        set: {serialize: none}
+      - name: counter
+        when: {csr: {csr_class: counters}}
+        add_tags: [counter_read]
+      - name: fp_state_write
+        when: {csr: {csr_class: fp_state}, rs1: {not: x0}}
+        set: {serialize: rename}
+      - name: translation_write
+        when: {csr: {csr_class: translation}, rs1: {not: x0}}
+        set: {serialize: flush}
+
+  sfence_vma:
+    fu_class: system
+    tags: [tlb_flush]
+    set: {serialize: flush}
+    operands:
+      rs1: {role: src, file: x}
+      rs2: {role: src, file: x}
+    variants:
+      - when: {rs1: x0}
+        add_tags: [tlb_all_addresses]
+      - when: {rs2: x0}
+        add_tags: [tlb_all_asids]
+
+  # ---------------------------------------------------------------- FP
+  fsgnj_d:
+    fu_class: fp_misc
+    operands:
+      rd: {role: dest, file: f}
+      rs1: {role: src, file: f}
+      rs2: {role: src, file: f}
+    variants:
+      - name: fmv_d
+        when: {rs2: {eq: rs1}}
+        add_tags: [move]
+
+  fadd_d:
+    fu_class: fp_add
+    operands:
+      rd: {role: dest, file: f}
+      rs1: {role: src, file: f}
+      rs2: {role: src, file: f}
+      rm: {role: rm}
+    variants:
+      - name: dynamic_rm
+        when: {rm: 7}
+        add_tags: [dyn_rm]
+
+  # ---------------------------------------------------------------- vector
+  vadd_vv:
+    fu_class: vec_alu
+    vector: {kind: arith, eew: sew, width: single, uop_pattern: per_lmul}
+    operands:
+      vd: {role: dest, file: v}
+      vs1: {role: src, file: v}
+      vs2: {role: src, file: v}
+      vm: {role: mask}
+    variants:
+      - name: masked
+        when: {vm: 0}
+        add_tags: [masked]
+        add_implicit: [{reg: v0, role: src}]
+
+  vxor_vv:
+    fu_class: vec_alu
+    vector: {kind: arith, eew: sew, width: single, uop_pattern: per_lmul}
+    operands:
+      vd: {role: dest, file: v}
+      vs1: {role: src, file: v}
+      vs2: {role: src, file: v}
+      vm: {role: mask}
+    variants:
+      - name: masked
+        when: {vm: 0}
+        add_tags: [masked]
+        add_implicit: [{reg: v0, role: src}]
+      - name: zero
+        when: {vm: 1, vs1: {eq: vs2}}
+        add_tags: [zero_idiom]
+
+  vle32_v:
+    fu_class: vec_load
+    vector: {kind: load, eew: 32, mem_mode: unit, uop_pattern: per_emul_nf}
+    set: {segments_from_nf: true}
+    operands:
+      vd: {role: dest, file: v}
+      rs1: {role: src, file: x}
+      vm: {role: mask}
+      nf: {role: other}
+    variants:
+      - name: masked
+        when: {vm: 0}
+        add_tags: [masked]
+        add_implicit: [{reg: v0, role: src}]
+      - name: segment
+        when: {nf: {not: 0}}
+        add_tags: [segment]
+
+  vsetvli:
+    fu_class: vset
+    tags: [vtype_static]
+    set: {serialize: rename}
+    vector: {kind: config}
+    operands:
+      rd: {role: dest, file: x}
+      rs1: {role: src, file: x}
+      zimm11: {role: imm}
+    variants:
+      - name: avl_rs1
+        when: {rs1: {not: x0}}
+        add_tags: [vl_from_rs1]
+      - name: vlmax
+        when: {rs1: x0, rd: {not: x0}}
+        add_tags: [vl_max]
+      - name: keep_vl
+        when: {rs1: x0, rd: x0}
+        add_tags: [vl_keep]
+
+  vsetivli:
+    fu_class: vset
+    tags: [vtype_static, avl_static]
+    set: {serialize: rename}
+    vector: {kind: config}
+    operands:
+      rd: {role: dest, file: x}
+      zimm5: {role: imm}
+      zimm10: {role: imm}
+
+fusion:
+  - name: lui_addi
+    first: [lui]
+    second: [addi, addiw]
+    when:
+      second.rs1: {eq: first.rd}
+      second.rd: {eq: first.rd}
+    fu_class: alu
+    tags: [constant]
+
+  - name: auipc_jalr
+    first: [auipc]
+    second: [jalr]
+    when:
+      second.rs1: {eq: first.rd}
+    fu_class: branch
+    tags: [jump, direct]

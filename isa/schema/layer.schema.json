@@ -1,0 +1,282 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/uarchlabs/aspenapi/isa/schema/layer.schema.json",
+  "title": "AspenADL microarchitecture layer, v1",
+  "description": "Microarchitecture data layered on riscv-opcodes. Instruction names are riscv-opcodes instr_dict keys (dots replaced by underscores, as in Spike's DECLARE_INSN). Latencies are deliberately absent: execution units specify them in Sparta parameters.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["format", "profile"],
+  "properties": {
+    "format": { "const": 1 },
+    "profile": {
+      "description": "Name of the profile file in isa/profiles whose instruction set this layer describes.",
+      "type": "string"
+    },
+    "fu_classes": {
+      "description": "Functional-unit class vocabulary. Instructions and uops name one of these.",
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/description" }
+    },
+    "tags": {
+      "description": "Attribute-tag vocabulary. Every tag used anywhere must be declared here.",
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/description" }
+    },
+    "attributes": {
+      "description": "Typed attribute vocabulary, set per instruction or by variants.",
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/attributeDecl" }
+    },
+    "uop_patterns": {
+      "description": "Named vector uop-expansion patterns; the timing model implements each one.",
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/description" }
+    },
+    "csr_classes": {
+      "description": "Groups of CSRs, by riscv-opcodes csrs.csv name, for use in csr_class matchers.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["csrs"],
+        "properties": {
+          "description": { "type": "string" },
+          "csrs": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/name" } }
+        }
+      }
+    },
+    "rules": {
+      "description": "Global variant rules. A rule applies to every instruction that has all the fields named in its 'when', minus 'except', optionally limited to some functional-unit classes. Rules apply before an instruction's own variants.",
+      "type": "array",
+      "items": { "$ref": "#/$defs/rule" }
+    },
+    "instructions": {
+      "type": "object",
+      "propertyNames": { "$ref": "#/$defs/name" },
+      "additionalProperties": { "$ref": "#/$defs/instruction" }
+    },
+    "fusion": {
+      "description": "Fusion pairs: two adjacent instructions that decode as one.",
+      "type": "array",
+      "items": { "$ref": "#/$defs/fusionPair" }
+    }
+  },
+  "$defs": {
+    "name": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+    "nameList": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/name" } },
+    "description": { "type": "string", "minLength": 1 },
+    "register": {
+      "description": "Architectural register name; compressed register fields are matched after decoding to x8-x15 etc.",
+      "type": "string",
+      "pattern": "^[xfv]([0-9]|[12][0-9]|3[01])$"
+    },
+    "attributeDecl": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "description"],
+      "properties": {
+        "type": { "enum": ["boolean", "integer", "enum"] },
+        "description": { "type": "string" },
+        "values": { "type": "array", "minItems": 2, "uniqueItems": true, "items": { "$ref": "#/$defs/name" } },
+        "minimum": { "type": "integer" },
+        "default": { "type": ["boolean", "integer", "string"] }
+      },
+      "allOf": [
+        { "if": { "properties": { "type": { "const": "enum" } } }, "then": { "required": ["values"] } }
+      ]
+    },
+    "attributeValues": {
+      "type": "object",
+      "propertyNames": { "$ref": "#/$defs/name" },
+      "additionalProperties": { "type": ["boolean", "integer", "string"] }
+    },
+    "scalar": {
+      "description": "A register name, a raw field value (unsigned, as encoded), or a CSR name for the csr field.",
+      "anyOf": [
+        { "type": "integer", "minimum": 0 },
+        { "$ref": "#/$defs/register" },
+        { "type": "string", "pattern": "^[a-z][a-z0-9_.]*$" }
+      ]
+    },
+    "matcher": {
+      "description": "Condition on one field of one instance.",
+      "oneOf": [
+        { "$ref": "#/$defs/scalar" },
+        { "description": "Member of a set.", "type": "array", "minItems": 2, "uniqueItems": true, "items": { "$ref": "#/$defs/scalar" } },
+        {
+          "type": "object", "additionalProperties": false, "required": ["eq"],
+          "properties": { "eq": { "description": "Equal to another field of the same instance (fusion: 'first.rd').", "type": "string" } }
+        },
+        {
+          "type": "object", "additionalProperties": false, "required": ["ne"],
+          "properties": { "ne": { "description": "Not equal to another field.", "type": "string" } }
+        },
+        {
+          "type": "object", "additionalProperties": false, "required": ["all"],
+          "properties": { "all": { "description": "Every matcher holds.", "type": "array", "minItems": 2, "items": { "$ref": "#/$defs/matcher" } } }
+        },
+        {
+          "type": "object", "additionalProperties": false, "required": ["not"],
+          "properties": { "not": { "$ref": "#/$defs/matcher" } }
+        },
+        {
+          "type": "object", "additionalProperties": false, "required": ["csr_class"],
+          "properties": { "csr_class": { "$ref": "#/$defs/name" } }
+        },
+        {
+          "type": "object", "additionalProperties": false, "required": ["mask", "value"],
+          "properties": {
+            "mask": { "type": "integer", "minimum": 1 },
+            "value": { "type": "integer", "minimum": 0 }
+          }
+        }
+      ]
+    },
+    "when": {
+      "description": "All listed field conditions must hold (AND).",
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": { "$ref": "#/$defs/matcher" }
+    },
+    "implicitOperand": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reg", "role"],
+      "properties": {
+        "reg": { "$ref": "#/$defs/register" },
+        "role": { "enum": ["src", "dest", "src_dest"] }
+      }
+    },
+    "effects": {
+      "properties": {
+        "add_tags": { "$ref": "#/$defs/nameList" },
+        "remove_tags": { "$ref": "#/$defs/nameList" },
+        "set": { "$ref": "#/$defs/attributeValues" },
+        "add_implicit": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/implicitOperand" } }
+      },
+      "anyOf": [
+        { "required": ["add_tags"] },
+        { "required": ["remove_tags"] },
+        { "required": ["set"] },
+        { "required": ["add_implicit"] }
+      ]
+    },
+    "variant": {
+      "type": "object",
+      "required": ["when"],
+      "properties": {
+        "name": { "$ref": "#/$defs/name" },
+        "when": { "$ref": "#/$defs/when" },
+        "add_tags": true, "remove_tags": true, "set": true, "add_implicit": true
+      },
+      "additionalProperties": false,
+      "allOf": [ { "$ref": "#/$defs/effects" } ]
+    },
+    "rule": {
+      "type": "object",
+      "required": ["name", "when"],
+      "properties": {
+        "name": { "$ref": "#/$defs/name" },
+        "when": { "$ref": "#/$defs/when" },
+        "only_fu_classes": { "$ref": "#/$defs/nameList" },
+        "except": { "$ref": "#/$defs/nameList" },
+        "add_tags": true, "remove_tags": true, "set": true, "add_implicit": true
+      },
+      "additionalProperties": false,
+      "allOf": [ { "$ref": "#/$defs/effects" } ]
+    },
+    "operand": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["role"],
+      "properties": {
+        "role": { "enum": ["src", "dest", "src_dest", "imm", "csr", "rm", "mask", "other"] },
+        "file": { "enum": ["x", "f", "v"] }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "role": { "enum": ["src", "dest", "src_dest"] } } },
+          "then": { "required": ["file"] },
+          "else": { "not": { "required": ["file"] } }
+        }
+      ]
+    },
+    "uop": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "fu_class"],
+      "properties": {
+        "name": { "$ref": "#/$defs/name" },
+        "fu_class": { "$ref": "#/$defs/name" },
+        "tags": { "$ref": "#/$defs/nameList" }
+      }
+    },
+    "vector": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind"],
+      "properties": {
+        "kind": { "enum": ["arith", "load", "store", "config", "mask", "permute", "reduction", "move"] },
+        "eew": { "description": "Element width from the encoding, or 'sew' when it comes from vtype.", "oneOf": [ { "enum": [8, 16, 32, 64] }, { "const": "sew" } ] },
+        "mem_mode": { "enum": ["unit", "strided", "indexed_ordered", "indexed_unordered", "whole_register", "fault_first", "mask"] },
+        "width": { "description": "Destination width relative to SEW.", "enum": ["single", "widen", "narrow"] },
+        "uop_pattern": { "$ref": "#/$defs/name" }
+      }
+    },
+    "expandsTo": {
+      "description": "Compressed-to-base mapping: base field -> compressed field, fixed register or fixed raw value. The entry inherits the base entry's data; its own variants apply on top.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["instruction", "operands"],
+      "properties": {
+        "instruction": { "$ref": "#/$defs/name" },
+        "operands": {
+          "type": "object",
+          "additionalProperties": { "anyOf": [ { "$ref": "#/$defs/name" }, { "$ref": "#/$defs/register" }, { "type": "integer", "minimum": 0 } ] }
+        }
+      }
+    },
+    "instruction": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "fu_class": { "$ref": "#/$defs/name" },
+        "expands_to": { "$ref": "#/$defs/expandsTo" },
+        "operands": {
+          "description": "Role of each riscv-opcodes variable field.",
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/operand" }
+        },
+        "implicit": { "type": "array", "items": { "$ref": "#/$defs/implicitOperand" } },
+        "tags": { "$ref": "#/$defs/nameList" },
+        "set": { "$ref": "#/$defs/attributeValues" },
+        "uops": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/uop" } },
+        "vector": { "$ref": "#/$defs/vector" },
+        "variants": { "type": "array", "items": { "$ref": "#/$defs/variant" } },
+        "notes": { "type": "string" }
+      },
+      "oneOf": [
+        { "required": ["fu_class"], "not": { "required": ["expands_to"] } },
+        { "required": ["expands_to"], "not": { "required": ["fu_class"] } }
+      ]
+    },
+    "fusionPair": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "first", "second", "fu_class"],
+      "properties": {
+        "name": { "$ref": "#/$defs/name" },
+        "first": { "$ref": "#/$defs/nameList" },
+        "second": { "$ref": "#/$defs/nameList" },
+        "when": {
+          "description": "Field conditions qualified by 'first.' or 'second.'.",
+          "type": "object",
+          "propertyNames": { "pattern": "^(first|second)\\.[a-z][a-z0-9_]*$" },
+          "additionalProperties": { "$ref": "#/$defs/matcher" }
+        },
+        "fu_class": { "$ref": "#/$defs/name" },
+        "tags": { "$ref": "#/$defs/nameList" }
+      }
+    }
+  }
+}
