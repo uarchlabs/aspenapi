@@ -9,3 +9,4 @@ utils/obj
 versions/*
 __pycache__/
 .pytest_cache/
+build/

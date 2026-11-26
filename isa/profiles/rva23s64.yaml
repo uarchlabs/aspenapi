@@ -1,63 +1,93 @@
 # RVA23S64 instruction set, as riscv-opcodes extension files.
 #
+# Every mandatory RVA23S64 extension is listed under `extensions`, with the
+# riscv-opcodes files that hold its instructions. Extensions that add no
+# instructions (memory-model, PMA and CSR-behaviour extensions) have
+# `files: []`. `python3 -m aspen_isa profile --spec <rva23-profile.adoc>`
+# checks this list against the ratified profile text.
+#
 # The instruction set with IDs is every base entry in these files plus the
 # pseudo-ops riscv-opcodes emits into encoding.h (prefetch.*, pause, mop.*,
 # c.mop.*), so it matches what Spike decodes. Other pseudo-ops (mv, ret,
 # fmv.d, ntl.*, ...) are operand patterns of a base entry: they become layer
 # variants, not IDs.
 #
-# Optional RVA23 extensions (Zicfilp, Zicfiss, Zfh, crypto, ...) are left out.
-# A3 confirms this list against the RVA23S64 profile.
+# Optional RVA23 extensions (Zicfilp, Zicfiss, Zfh, Zacas, Zabha, crypto, ...)
+# are left out.
 
 format: 1
 name: rva23s64
 riscv_opcodes_commit: c1d9bdfbc92a0ac30e8870106df9f55286e6c80a
 
-extension_files:
-  scalar:
-    - rv_i
-    - rv64_i
-    - rv_m
-    - rv64_m
-    - rv_a
-    - rv64_a
-    - rv_f
-    - rv64_f
-    - rv_d
-    - rv64_d
-    - rv_c
-    - rv64_c
-    - rv_c_d
-    - rv_zicsr
-    - rv_zifencei
-    - rv_zicntr
-    - rv_zicond
-    - rv_zba
-    - rv64_zba
-    - rv_zbb
-    - rv64_zbb
-    - rv_zbs
-    - rv64_zbs
-    - rv_f_zfa
-    - rv_d_zfa
-    - rv_zfhmin
-    - rv_d_zfhmin
-    - rv_zcb
-    - rv64_zcb
-    - rv_zimop
-    - rv_zcmop
-    - rv_zawrs
-    - rv_zicbo
-    - rv_zihintntl
-    - rv_c_zihintntl
-  privileged:
-    - rv_system
-    - rv_s
-    - rv_svinval
-    - rv_h
-    - rv64_h
-    - rv_svinval_h
-  vector:
-    # Zvfhmin's conversions are in rv_v.
-    - rv_v
-    - rv_zvbb
+spec:
+  source: https://github.com/riscv/riscv-profiles/blob/main/src/rva23-profile.adoc
+  commit: e030b70992447784ad9081045d47ce6e278f381e
+
+extensions:
+  # ---------------------------------------------------------------- scalar (A4)
+  - {name: RV64I, group: scalar, files: [rv_i, rv64_i],
+     note: "Also holds pause (Zihintpause) and fence.tso"}
+  - {name: M, group: scalar, files: [rv_m, rv64_m]}
+  - {name: A, group: scalar, files: [rv_a, rv64_a]}
+  - {name: F, group: scalar, files: [rv_f, rv64_f]}
+  - {name: D, group: scalar, files: [rv_d, rv64_d]}
+  - {name: C, group: scalar, files: [rv_c, rv64_c, rv_c_d], note: "Zca, and Zcd with D"}
+  - {name: B, group: scalar, files: [rv_zba, rv64_zba, rv_zbb, rv64_zbb, rv_zbs, rv64_zbs],
+     note: "Zba, Zbb, Zbs; RV64 zext.h is promoted from a packw pseudo-op"}
+  - {name: Zicsr, group: scalar, files: [rv_zicsr]}
+  - {name: Zicntr, group: scalar, files: [rv_zicntr], note: "Pseudo-ops of csrrs only"}
+  - {name: Zihpm, group: scalar, files: [], note: "Counter CSRs; rdhpmcounter is csrrs"}
+  - {name: Zihintpause, group: scalar, files: [], note: "pause is in rv_i"}
+  - {name: Zicbom, group: scalar, files: [rv_zicbo]}
+  - {name: Zicbop, group: scalar, files: [], note: "prefetch.* are in rv_zicbo"}
+  - {name: Zicboz, group: scalar, files: [], note: "cbo.zero is in rv_zicbo"}
+  - {name: Zfhmin, group: scalar, files: [rv_zfhmin, rv_d_zfhmin]}
+  - {name: Zfa, group: scalar, files: [rv_f_zfa, rv_d_zfa],
+     note: "rv_zfh_zfa needs Zfh, which RVA23 leaves optional"}
+  - {name: Zicond, group: scalar, files: [rv_zicond]}
+  - {name: Zimop, group: scalar, files: [rv_zimop]}
+  - {name: Zcmop, group: scalar, files: [rv_zcmop]}
+  - {name: Zcb, group: scalar, files: [rv_zcb, rv64_zcb]}
+  - {name: Zawrs, group: scalar, files: [rv_zawrs]}
+  - {name: Zihintntl, group: scalar, files: [rv_zihintntl, rv_c_zihintntl], note: "Pseudo-ops of add and c.add only"}
+  - {name: Zifencei, group: scalar, files: [rv_zifencei]}
+  # ---------------------------------------------------------------- privileged (A4)
+  - {name: Ss1p13, group: privileged, files: [rv_system, rv_s],
+     note: "rv_system also holds mret, an M-mode instruction"}
+  - {name: Svinval, group: privileged, files: [rv_svinval]}
+  - {name: H, group: privileged, files: [rv_h, rv64_h, rv_svinval_h], note: "Part of Sha"}
+  # ---------------------------------------------------------------- vector (A7)
+  - {name: V, group: vector, files: [rv_v]}
+  - {name: Zvfhmin, group: vector, files: [], note: "vfwcvt.f.f.v and vfncvt.f.f.w are in rv_v"}
+  - {name: Zvbb, group: vector, files: [rv_zvbb], note: "Includes Zvkb"}
+  # ---------------------------------------------------------------- no instructions
+  - {name: Ziccif, files: []}
+  - {name: Ziccrse, files: []}
+  - {name: Ziccamoa, files: []}
+  - {name: Zicclsm, files: []}
+  - {name: Za64rs, files: []}
+  - {name: Zic64b, files: []}
+  - {name: Zkt, files: []}
+  - {name: Zvkt, files: []}
+  - {name: Supm, files: []}
+  - {name: Svbare, files: []}
+  - {name: Sv39, files: []}
+  - {name: Svade, files: []}
+  - {name: Ssccptr, files: []}
+  - {name: Sstvecd, files: []}
+  - {name: Sstvala, files: []}
+  - {name: Sscounterenw, files: []}
+  - {name: Svpbmt, files: []}
+  - {name: Svnapot, files: []}
+  - {name: Sstc, files: []}
+  - {name: Sscofpmf, files: []}
+  - {name: Ssnpm, files: []}
+  - {name: Ssu64xl, files: []}
+  - {name: Sha, files: [], note: "H plus the extensions below"}
+  - {name: Ssstateen, files: []}
+  - {name: Shcounterenw, files: []}
+  - {name: Shvstvala, files: []}
+  - {name: Shtvala, files: []}
+  - {name: Shvstvecd, files: []}
+  - {name: Shvsatpa, files: []}
+  - {name: Shgatpa, files: []}

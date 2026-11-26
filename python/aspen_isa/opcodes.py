@@ -34,6 +34,12 @@ class Instr:
     match: int
     mask: int
     pseudo: bool = False
+    # For riscv-opcodes pseudo-ops: the base instruction they are defined on.
+    pseudo_of: str | None = None
+    # Spike's DECLARE_INSN name for this encoding. Differs from name only for
+    # pseudo-ops that riscv-opcodes promotes because their base is not in the
+    # profile (zext_h is packw with rs2 = 0; Spike executes it as packw).
+    spike_name: str | None = None
 
     @property
     def length(self) -> int:
@@ -47,23 +53,25 @@ class InstrSet:
     instrs: dict[str, Instr]
     pseudo_patterns: dict[str, Instr] = field(default_factory=dict)
     field_widths: dict[str, int] = field(default_factory=dict)
+    field_ranges: dict[str, tuple[int, int]] = field(default_factory=dict)
     csrs: dict[str, int] = field(default_factory=dict)
 
 
 def load_profile(path: Path) -> dict:
     with open(path, encoding="utf-8") as f:
         prof = yaml.safe_load(f)
-    for key in ("format", "name", "riscv_opcodes_commit", "extension_files"):
+    for key in ("format", "name", "riscv_opcodes_commit", "extensions"):
         if key not in prof:
             raise OpcodesError(f"{path}: missing '{key}'")
     return prof
 
 
-def profile_files(prof: dict) -> list[str]:
-    groups = prof["extension_files"]
+def profile_files(prof: dict, group: str | None = None) -> list[str]:
+    """The profile's riscv-opcodes files, in order, optionally for one group."""
     files: list[str] = []
-    for group in groups.values():
-        files.extend(group)
+    for ext in prof["extensions"]:
+        if group is None or ext.get("group") == group:
+            files.extend(f for f in ext.get("files", []) if f not in files)
     return files
 
 
@@ -91,6 +99,28 @@ def _import_riscv_opcodes(repo: Path):
     return shared, consts
 
 
+_PSEUDO_LINE = re.compile(r"^\$pseudo_op\s+\S+::(\S+)\s+(\S+)")
+
+
+def _pseudo_bases(repo: Path, files: list[str]) -> dict[str, str]:
+    """Map each pseudo-op name in the profile's files to the base instruction it is defined on.
+
+    A name defined as a real instruction in one of the files (c.ld in rv64_c,
+    a pseudo-op of c.flw in RV32 files) is not a pseudo-op for this profile.
+    """
+    pseudo: dict[str, str] = {}
+    real: set[str] = set()
+    for name in files:
+        for line in (repo / "extensions" / name).read_text(encoding="utf-8").splitlines():
+            line = line.strip()
+            m = _PSEUDO_LINE.match(line)
+            if m:
+                pseudo.setdefault(m.group(2).replace(".", "_"), m.group(1).replace(".", "_"))
+            elif line and not line.startswith(("#", "$")):
+                real.add(line.split()[0].replace(".", "_"))
+    return {k: v for k, v in pseudo.items() if k not in real}
+
+
 def load(repo: Path, prof: dict, check_commit: bool = True) -> InstrSet:
     """Build the profile's instruction set from riscv-opcodes."""
     repo = Path(repo)
@@ -106,14 +136,19 @@ def load(repo: Path, prof: dict, check_commit: bool = True) -> InstrSet:
     if missing:
         raise OpcodesError(f"profile names extension files not in riscv-opcodes: {', '.join(missing)}")
 
+    pseudo_of = _pseudo_bases(repo, files)
     shared, consts = _import_riscv_opcodes(repo)
     base = shared.create_inst_dict(files, include_pseudo=False)
     with_pseudo = shared.create_inst_dict(files, include_pseudo=True)
     emitted = set(consts.emitted_pseudo_ops)
 
     def mk(name: str, d: dict, pseudo: bool) -> Instr:
+        base_of = pseudo_of.get(name)
+        promoted = base_of is not None and name not in emitted and not pseudo
         return Instr(name, list(d["variable_fields"]), list(d["extension"]),
-                     int(d["match"], 16), int(d["mask"], 16), pseudo)
+                     int(d["match"], 16), int(d["mask"], 16),
+                     pseudo or promoted, base_of,
+                     base_of if promoted else name)
 
     instrs = {n: mk(n, d, False) for n, d in base.items()}
     patterns: dict[str, Instr] = {}
@@ -125,11 +160,9 @@ def load(repo: Path, prof: dict, check_commit: bool = True) -> InstrSet:
         else:
             patterns[n] = mk(n, d, True)
 
-    widths: dict[str, int] = {}
-    with open(repo / "arg_lut.csv", encoding="utf-8") as f:
-        for row in csv.reader(f, skipinitialspace=True):
-            if len(row) == 3:
-                widths[row[0]] = int(row[1]) - int(row[2]) + 1
+    # riscv-opcodes' own field table: arg_lut.csv plus the fields it adds in code.
+    ranges = {k: (int(v[0]), int(v[1])) for k, v in consts.arg_lut.items()}
+    widths = {k: msb - lsb + 1 for k, (msb, lsb) in ranges.items()}
 
     csrs: dict[str, int] = {}
     with open(repo / "csrs.csv", encoding="utf-8") as f:
@@ -137,5 +170,8 @@ def load(repo: Path, prof: dict, check_commit: bool = True) -> InstrSet:
             if len(row) == 2:
                 csrs[row[1]] = int(row[0], 16)
 
+    missing = sorted({f for i in instrs.values() for f in i.fields if f not in ranges})
+    if missing:
+        raise OpcodesError(f"fields without a bit range in riscv-opcodes: {', '.join(missing)}")
     return InstrSet(prof["name"], commit, dict(sorted(instrs.items())),
-                    dict(sorted(patterns.items())), widths, csrs)
+                    dict(sorted(patterns.items())), widths, ranges, csrs)

@@ -48,5 +48,31 @@ jobs:
           fi
           PYTHONPATH=python python -m aspen_isa validate -q $extra
 
+      - name: Fetch the RVA23 profile text and ua-spike's encoding.h
+        run: |
+          # Profile text, at the commit named in isa/profiles/rva23s64.yaml
+          commit=$(sed -n 's/^  commit: *//p' isa/profiles/rva23s64.yaml)
+          git clone -q https://github.com/riscv/riscv-profiles.git "$RUNNER_TEMP/riscv-profiles"
+          git -C "$RUNNER_TEMP/riscv-profiles" checkout -q "$commit"
+          echo "RVA23_PROFILE_ADOC=$RUNNER_TEMP/riscv-profiles/src/rva23-profile.adoc" >> "$GITHUB_ENV"
+          # Spike's decoder table, from ua-spike main
+          curl -fsSL https://raw.githubusercontent.com/uarchlabs/ua-spike/main/riscv/encoding.h \
+            -o "$RUNNER_TEMP/encoding.h"
+          echo "SPIKE_ENCODING_H=$RUNNER_TEMP/encoding.h" >> "$GITHUB_ENV"
+
+      - name: Profile matches the ratified RVA23S64 text
+        run: PYTHONPATH=python python -m aspen_isa profile --spec "$RVA23_PROFILE_ADOC"
+
+      - name: Encodings match ua-spike
+        run: PYTHONPATH=python python -m aspen_isa spike "$SPIKE_ENCODING_H"
+
+      - name: Merged database
+        run: PYTHONPATH=python python -m aspen_isa merge -o build/rva23s64.db.json
+
       - name: Tests
         run: python -m pytest -q python/tests
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: isa-database
+          path: build/rva23s64.db.json

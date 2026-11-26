@@ -3,19 +3,25 @@
 # Copyright (c) 2026 Jeff Nye, uarchlabs.com
 # SPDX-FileCopyrightText: 2026 Jeff Nye <jeff@uarchlabs.com>
 # ===================================================================
-"""Command line: python3 -m aspen_isa {validate,ids,list} ..."""
+"""Command line: python3 -m aspen_isa {validate,ids,list,merge,decode,profile,spike} ..."""
 
 from __future__ import annotations
 
 import argparse
+import json
 import sys
 from pathlib import Path
 
 import yaml
 
+from . import decode as dec
+from . import evaluate as ev
 from . import ids as idreg
 from . import layer as lay
+from . import merge as mrg
 from . import opcodes
+from . import profile as prf
+from . import spike as spk
 
 ROOT = Path(__file__).resolve().parents[2]
 DEFAULTS = {
@@ -47,11 +53,16 @@ def _report(errors: list[str], warnings: list[str], quiet_warnings: bool = False
 
 
 def cmd_validate(args) -> int:
-    _, iset = _iset(args)
-    errors: list[str] = []
+    prof, iset = _iset(args)
+    errors: list[str] = list(prf.check(prof, args.opcodes))
     warnings: list[str] = []
+    ov = dec.analyse(iset)
+    errors += [f"encodings {a} and {b}: {why}" for a, b, why in ov.conflicts]
     for path in args.layer or [DEFAULTS["layer"]]:
-        e, w = lay.validate(lay.load_yaml(path), iset)
+        doc = lay.load_yaml(path)
+        e, w = lay.validate(doc, iset)
+        w += [f"instructions/{n}: no instruction word decodes to it (fully covered by more specific entries)"
+              for n in ov.shadowed if n in (doc.get("instructions") or {})]
         errors += [f"{path.name}: {x}" for x in e]
         warnings += [f"{path.name}: {x}" for x in w]
     base = idreg.load(args.ids_base) if args.ids_base and args.ids_base.exists() else None
@@ -84,6 +95,84 @@ def cmd_list(args) -> int:
     return 0
 
 
+def _db(args) -> dict:
+    prof, iset = _iset(args)
+    layer = lay.load_yaml(args.layer_file)
+    errors, _ = lay.validate(layer, iset)
+    if errors:
+        raise ValueError(f"{args.layer_file.name} does not validate; run: python3 -m aspen_isa validate")
+    return mrg.build(layer, iset, idreg.load(args.ids), prof, args.opcodes)
+
+
+def cmd_merge(args) -> int:
+    db = _db(args)
+    text = json.dumps(db, indent=1, sort_keys=False) + "\n"
+    if args.output:
+        args.output.parent.mkdir(parents=True, exist_ok=True)
+        args.output.write_text(text, encoding="utf-8")
+    else:
+        sys.stdout.write(text)
+    cov = ", ".join(f"{g} {c['entry']}+{c['inherited']} of {sum(c.values())}" for g, c in db["coverage"].items())
+    print(f"merged {len(db['instructions'])} instructions; layer coverage: {cov}", file=sys.stderr)
+    return 0
+
+
+def cmd_decode(args) -> int:
+    prof, iset = _iset(args)
+    db = _db(args)
+    d = dec.Decoder(iset, db["decode_order"])
+    e = ev.Evaluator(db)
+    rc = 0
+    for w in args.words:
+        word = int(w, 16)
+        hit = d.decode(word)
+        if hit is None:
+            print(f"{word:#010x}: no instruction")
+            rc = 1
+            continue
+        name, raw = hit
+        fields = " ".join(f"{k}={v}" for k, v in raw.items())
+        line = f"{word:#010x}: {name} {fields}".rstrip()
+        if e.by_name[name]["layer"] != "missing":
+            r = e.evaluate(name, raw)
+            line += f"  tags=[{', '.join(sorted(r.tags))}]"
+            changed = {k: v for k, v in r.attributes.items()
+                       if db["attributes"].get(k, {}).get("default") != v}
+            if changed:
+                line += f" attributes={changed}"
+            if r.implicit:
+                line += f" implicit={r.implicit}"
+        else:
+            line += "  (no layer entry yet)"
+        print(line)
+    return rc
+
+
+def cmd_profile(args) -> int:
+    prof = opcodes.load_profile(args.profile)
+    errors = prf.check(prof, args.opcodes)
+    if args.spec:
+        missing, extra = prf.compare_with_spec(prof, args.spec)
+        errors += [f"profile: {n} is mandatory in {prof['name']} but not listed" for n in missing]
+        errors += [f"profile: {n} is listed but not mandatory in {prof['name']}" for n in extra]
+    rc = _report(errors, [])
+    if rc == 0:
+        print(f"ok: {len(prof['extensions'])} extensions, {len(opcodes.profile_files(prof))} riscv-opcodes files"
+              + (", matches the profile text" if args.spec else ""))
+    return rc
+
+
+def cmd_spike(args) -> int:
+    _, iset = _iset(args)
+    errors, notes = spk.compare(iset, args.encoding_h)
+    for n in notes:
+        print(f"note: {n}")
+    rc = _report(errors, [])
+    if rc == 0:
+        print(f"ok: all {len(iset.instrs)} encodings match {args.encoding_h}")
+    return rc
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(prog="aspen_isa", description="AspenADL ISA layer tools")
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -105,6 +194,28 @@ def main(argv=None) -> int:
     _common(ls)
     ls.add_argument("--patterns", action="store_true", help="list pseudo-op operand patterns instead")
     ls.set_defaults(fn=cmd_list)
+
+    m = sub.add_parser("merge", help="write the merged instruction database (JSON)")
+    _common(m)
+    m.add_argument("--layer-file", type=Path, default=DEFAULTS["layer"])
+    m.add_argument("-o", "--output", type=Path, help="output file (default: stdout)")
+    m.set_defaults(fn=cmd_merge)
+
+    d = sub.add_parser("decode", help="decode instruction words (hex) and evaluate their variants")
+    _common(d)
+    d.add_argument("--layer-file", type=Path, default=DEFAULTS["layer"])
+    d.add_argument("words", nargs="+")
+    d.set_defaults(fn=cmd_decode)
+
+    pr = sub.add_parser("profile", help="check the profile file, optionally against the profile text")
+    _common(pr)
+    pr.add_argument("--spec", type=Path, help="riscv-profiles src/rva23-profile.adoc")
+    pr.set_defaults(fn=cmd_profile)
+
+    sp = sub.add_parser("spike", help="compare encodings with Spike's riscv/encoding.h")
+    _common(sp)
+    sp.add_argument("encoding_h", type=Path)
+    sp.set_defaults(fn=cmd_spike)
 
     args = ap.parse_args(argv)
     try:

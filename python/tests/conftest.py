@@ -48,3 +48,27 @@ def check(iset, schema):
         errors, _ = lay.validate(doc, iset, schema)
         return errors
     return run
+
+
+@pytest.fixture(scope="session")
+def profile_doc():
+    return opcodes.load_profile(PROFILE)
+
+
+@pytest.fixture(scope="session")
+def db(iset, _layer_doc, profile_doc):
+    from aspen_isa import ids as idreg
+    from aspen_isa import merge
+    return merge.build(_layer_doc, iset, idreg.load(IDS), profile_doc, OPCODES)
+
+
+@pytest.fixture(scope="session")
+def decoder(iset, db):
+    from aspen_isa import decode
+    return decode.Decoder(iset, db["decode_order"])
+
+
+@pytest.fixture(scope="session")
+def evaluator(db):
+    from aspen_isa import evaluate
+    return evaluate.Evaluator(db)

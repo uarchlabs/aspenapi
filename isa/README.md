@@ -11,11 +11,11 @@ tables.
 
 | Path | What it is |
 | --- | --- |
-| `profiles/rva23s64.yaml` | The riscv-opcodes extension files that make up RVA23S64, and the pinned commit |
+| `profiles/rva23s64.yaml` | Every mandatory RVA23S64 extension with its riscv-opcodes files, the pinned commit, and the profile text it was checked against |
 | `schema/layer.schema.json` | JSON Schema for layer files |
 | `layer/rva23s64.yaml` | The layer: vocabularies, rules, per-instruction entries, fusion pairs |
 | `ids.yaml` | Append-only instruction ID registry |
-| `../python/aspen_isa` | Loader, validator and ID tool |
+| `../python/aspen_isa` | Loader, validator, ID tool, overlap analysis, merged database, reference evaluator |
 
 ## Names and IDs
 
@@ -29,9 +29,26 @@ Other pseudo-ops (`mv`, `ret`, `fmv_d`, `ntl_*`, ...) are operand patterns
 of a base instruction: they become variants, not IDs.
 `python3 -m aspen_isa list --patterns` lists them.
 
+One promoted pseudo-op has an ID: RV64 `zext_h` is defined in riscv-opcodes
+as `packw` with `rs2 = 0`, and `packw` belongs to Zbkb, which RVA23 does not
+include. Spike executes it as `packw`; the merged database records that as
+`spike_name`.
+
 `ids.yaml` is append-only: an ID never changes and is never reused, and a
 name that leaves the profile keeps its ID. ID 0 means unknown. CI compares
 the registry against the previous commit.
+
+## Decode
+
+Two entries overlap when some word matches both. Every overlap must be
+nested: one entry's fixed bits strictly include the other's, and the more
+specific entry wins inside the other's space (`c_nop` inside `c_addi`,
+`pause` inside `fence`, `prefetch_r` inside `ori`). The validator rejects
+any other overlap. Decode order is by number of fixed bits, most first.
+
+An entry whose whole space is covered by more specific entries is
+*shadowed*: no word decodes to it. Today that is `mop_r_N`, `mop_rr_N` and
+`c_mop_N`, the generic forms of the numbered `mop_r_0`... entries.
 
 ## Layer file
 
@@ -78,8 +95,18 @@ architectural registers.
 | `csr_class` | `csr: {csr_class: counters}` | CSR is in the class |
 | `mask`, `value` | `pred: {mask: 12, value: 0}` | `field & mask == value` |
 
-Order: the entry's own `tags` and `set`, then rules, then variants in file
-order. Within a variant tags are added, then removed; a later `set` wins.
+Order: attribute defaults, the entry's own `tags` and `set`, then rules,
+then variants in file order. Within a variant tags are added, then removed;
+a later `set` wins.
+
+A compressed entry is evaluated as its base instruction on the mapped
+operands, including the base's rules and variants, then its own tags, `set`
+and variants apply. Immediates map as raw values, so across a mapping only
+zero and non-zero comparisons carry over.
+
+`python/aspen_isa/evaluate.py` implements these rules and is the reference:
+the generated decoders must agree with it, and `python/tests/test_evaluate.py`
+holds the cases.
 
 Fusion conditions qualify fields by side: `second.rs1: {eq: first.rd}`.
 
@@ -92,8 +119,22 @@ pip install -r python/requirements.txt
 PYTHONPATH=python python3 -m aspen_isa validate      # layer + ID registry
 PYTHONPATH=python python3 -m aspen_isa ids --assign  # IDs for new instructions
 PYTHONPATH=python python3 -m aspen_isa list          # instructions and their fields
+PYTHONPATH=python python3 -m aspen_isa merge -o build/rva23s64.db.json   # merged database
+PYTHONPATH=python python3 -m aspen_isa decode 00008067 852e              # decode and evaluate words
+PYTHONPATH=python python3 -m aspen_isa profile --spec <riscv-profiles>/src/rva23-profile.adoc
+PYTHONPATH=python python3 -m aspen_isa spike <ua-spike>/riscv/encoding.h
 python3 -m pytest -q python/tests
 ```
+
+The merged database (`merge`) is the input for the generators: every
+instruction with its ID, encoding, fields and bit ranges, decode order,
+overlaps, and its layer data with inherited data filled in. Its `coverage`
+counts how many instructions per group have layer entries yet.
+
+CI also runs `profile --spec` against the ratified profile text and `spike`
+against ua-spike's current `encoding.h`. The second check fails when
+ua-spike has been rebased onto a newer riscv-opcodes and the pin here has
+not moved yet; moving it is step 4 of ua-spike's monthly rebase.
 
 When the pinned riscv-opcodes commit moves, update the submodule and
 `riscv_opcodes_commit` in the profile together, then run `ids --assign`.
