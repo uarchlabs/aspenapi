@@ -19,9 +19,9 @@
 #   kind:         variant   proposed layer variant (tags, remove_tags, set, add_implicit)
 #                 rule      handled by a global layer rule (rule: name)
 #                 hint      HINT encoding; executes as the base instruction
-#                 reserved  reserved encoding, illegal
+#                 reserved  reserved encoding; decodes as illegal
 #                 none      no timing effect identified
-#                 review    needs a decision against pacino's decode and rename
+#                 review    needs a decision (none open)
 #   source:       where the pattern comes from
 #
 # Entries whose witness word decodes as another instruction are resolved
@@ -29,8 +29,14 @@
 # `reserved`. Proposed tags that the layer does not declare yet are listed
 # by `catalogue --check`; A4 adds them to the layer vocabulary.
 #
-# This file is a first cut written from the ISA manual and assembly manual.
-# The review against pacino's decode and rename RTL is part of A9.
+# Written from the ISA manual and assembly manual. Reviewed 2026-11-27
+# (A9) against pacino's decode RTL (uarchlabs/pacino 0913cd0: the IFU RVC
+# expander and instr_decoder, every catalogue witness word run through
+# both) and against Spike's execution-time checks. Decode legality agrees
+# except masked vector instructions with vd = v0, which this file and
+# Spike reserve and pacino still decodes; that is a pacino RTL task.
+# pacino has no rename RTL yet: idiom elimination is a timing-model
+# parameter, not a decision recorded here.
 
 format: 1
 
@@ -161,9 +167,27 @@ patterns:
   - id: csr_read_only_space
     instructions: [csrrw, csrrwi]
     when: {csr: {mask: 3072, value: 3072}}
-    kind: reserved
+    kind: variant
+    tags: [csr_write_trap]
     source: ["isa-manual:priv CSR address map"]
-    note: CSR addresses 0xC00-0xFFF are read-only; writing one raises an illegal-instruction exception.
+    note: >-
+      CSR addresses 0xC00-0xFFF are read-only; writing one raises an
+      illegal-instruction exception at the CSR access, not at decode
+      (Spike; pacino decodes it as legal).
+  - id: csr_read_only_space_set_clear
+    instructions: [csrrs, csrrc]
+    when: {csr: {mask: 3072, value: 3072}, rs1: {not: x0}}
+    kind: variant
+    tags: [csr_write_trap]
+    source: ["isa-manual:priv CSR address map"]
+    note: A set or clear with rs1 not x0 writes the CSR, so it traps the same way.
+  - id: csr_read_only_space_set_clear_imm
+    instructions: [csrrsi, csrrci]
+    when: {csr: {mask: 3072, value: 3072}, zimm5: {not: 0}}
+    kind: variant
+    tags: [csr_write_trap]
+    source: ["isa-manual:priv CSR address map"]
+    note: A set or clear with a non-zero immediate writes the CSR, so it traps the same way.
   - id: csr_named_pseudo_ops
     instructions: [csrr*]
     covers: ["riscv-opcodes:fr*", "riscv-opcodes:fs*", "riscv-opcodes:rd*"]
@@ -477,8 +501,11 @@ patterns:
   - id: fence_tso_fm
     instructions: [fence]
     covers: ["special:fm=tso"]
-    kind: review
-    note: fm=8 with sets other than rw,rw is reserved for future use.
+    kind: none
+    source: ["isa-manual:RV32I FENCE (reserved configurations are treated as FENCE)"]
+    note: >-
+      fm=8 with sets other than rw,rw is a reserved configuration, which
+      executes as a FENCE with its pred and succ (pacino DCD-29 agrees).
   - id: fence_misc
     instructions: [fence, fence_i]
     covers: ["x0:*", "zero:*"]
@@ -620,6 +647,15 @@ patterns:
     kind: reserved
     source: ["isa-manual:vector-common.adoc norm:vreg_vmask_rsv"]
     note: A masked instruction's destination group cannot overlap the mask register v0.
+  - id: v_carry_merge_vd_v0
+    instructions: [vadc_vvm, vadc_vxm, vadc_vim, vsbc_vvm, vsbc_vxm, vmerge_vvm, vmerge_vxm, vmerge_vim, vfmerge_vfm]
+    when: {vd: v0}
+    kind: reserved
+    source: ["isa-manual:vector-common.adoc norm:vadc_vsbc_vd_v0_rsv", "isa-manual:vector-common.adoc norm:vmerge_op_mask, norm:vreg_vmask_rsv"]
+    note: >-
+      These forms have vm fixed at 0, so the sweep never sees them as
+      masked; with vd = v0 they are reserved and Spike raises illegal
+      instruction (require_vm). vmadc and vmsbc write a mask and are legal.
   - id: v_segment
     instructions: ["vl*", "vs*"]
     covers: ["special:nf=segment"]

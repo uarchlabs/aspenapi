@@ -59,6 +59,7 @@ tags:
   csr_read: Reads a CSR
   csr_write: Writes a CSR
   counter_read: Reads a counter CSR
+  csr_write_trap: Writes a read-only CSR; decodes, then raises illegal instruction at the CSR access
   acquire: Acquire ordering
   release: Release ordering
   memory_only: Fence orders memory accesses only, not I/O
@@ -391,6 +392,9 @@ instructions:
       - name: translation_write
         when: {csr: {csr_class: translation}, rs1: {not: x0}}
         set: {serialize: flush}
+      - name: read_only_space_write
+        when: {csr: {mask: 3072, value: 3072}, rs1: {not: x0}}
+        add_tags: [csr_write_trap]
 
   sfence_vma:
     fu_class: system

@@ -135,6 +135,17 @@ fails if any entry is unresolved, if the committed catalogue is out of
 date, or if a layer entry disagrees with a `variant` or `rule` entry: the
 check builds a witness word for each one and evaluates it.
 
+`reserved` means the encoding decodes as illegal. An encoding that decodes
+but traps later, such as a write to a read-only CSR (0xC00-0xFFF), is a
+`variant` with the `csr_write_trap` tag instead.
+
+Reviewed 2026-11-27 against pacino's decode RTL (uarchlabs/pacino
+`0913cd0`): every witness word was run through pacino's RVC expander and
+`instr_decoder`, and decode legality agrees with this catalogue except for
+masked vector instructions with vd = v0 (patterns `v_masked_vd_v0` and
+`v_carry_merge_vd_v0`, 271 instructions). The catalogue and Spike reserve
+those; pacino still decodes them, which is a pacino RTL change.
+
 To change a decision, edit `patterns.yaml` and run `catalogue --write`.
 When A4 and A7 add layer entries, the catalogue's `variant` entries are
 the variants to write, and the layer check holds them to it.
