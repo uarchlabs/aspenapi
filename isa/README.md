@@ -15,6 +15,8 @@ tables.
 | `schema/layer.schema.json` | JSON Schema for layer files |
 | `layer/rva23s64.yaml` | The layer: vocabularies, rules, per-instruction entries, fusion pairs |
 | `ids.yaml` | Append-only instruction ID registry |
+| `catalogue/patterns.yaml` | Decisions for the operand-pattern catalogue, written from the ISA and assembly manuals |
+| `catalogue/rva23s64.yaml` | The catalogue itself, generated: every operand pattern of every instruction and its resolution |
 | `../python/aspen_isa` | Loader, validator, ID tool, overlap analysis, merged database, reference evaluator |
 
 ## Names and IDs
@@ -110,6 +112,37 @@ holds the cases.
 
 Fusion conditions qualify fields by side: `second.rs1: {eq: first.rd}`.
 
+## Operand-pattern catalogue
+
+`catalogue/rva23s64.yaml` lists, for every instruction, the operand
+patterns that might matter to timing, and how each is resolved. Patterns
+come from three places:
+
+- **A sweep:** every integer register field equal to x0, every immediate
+  equal to zero, every pair of same-file source registers equal, and the
+  special fields (rounding mode, vector mask, aq/rl, segment count, fence
+  sets).
+- **riscv-opcodes pseudo-ops** defined on the instruction (`mv`, `ret`,
+  `fmv_d`, `ntl_*`...).
+- **`catalogue/patterns.yaml`**, written from the ISA manual's HINT tables
+  and the assembly manual's pseudoinstruction tables, with commits pinned.
+
+`patterns.yaml` resolves each entry with its first matching pattern:
+`variant` (a proposed layer variant), `rule` (a global layer rule),
+`hint`, `reserved`, `none` or `review`. An entry whose witness words all
+decode as another instruction is resolved automatically (`encoding`). CI
+fails if any entry is unresolved, if the committed catalogue is out of
+date, or if a layer entry disagrees with a `variant` or `rule` entry: the
+check builds a witness word for each one and evaluates it.
+
+To change a decision, edit `patterns.yaml` and run `catalogue --write`.
+When A4 and A7 add layer entries, the catalogue's `variant` entries are
+the variants to write, and the layer check holds them to it.
+
+Known limit: riscv-opcodes field names like `rd_n0` mean "not zero", but
+the reference decoder does not reject those values yet; the catalogue
+lists the reserved ones (`c.jr x0`, `c.lwsp x0`, ...).
+
 ## Commands
 
 ```sh
@@ -123,6 +156,9 @@ PYTHONPATH=python python3 -m aspen_isa merge -o build/rva23s64.db.json   # merge
 PYTHONPATH=python python3 -m aspen_isa decode 00008067 852e              # decode and evaluate words
 PYTHONPATH=python python3 -m aspen_isa profile --spec <riscv-profiles>/src/rva23-profile.adoc
 PYTHONPATH=python python3 -m aspen_isa spike <ua-spike>/riscv/encoding.h
+PYTHONPATH=python python3 -m aspen_isa catalogue --check --strict-layer       # A9 catalogue
+PYTHONPATH=python python3 -m aspen_isa catalogue --write                      # after editing patterns.yaml
+PYTHONPATH=python python3 -m aspen_isa catalogue --show addi jalr             # one instruction's entries
 python3 -m pytest -q python/tests
 ```
 

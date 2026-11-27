@@ -1,0 +1,708 @@
+# ===================================================================
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2026 Jeff Nye, uarchlabs.com
+# SPDX-FileCopyrightText: 2026 Jeff Nye <jeff@uarchlabs.com>
+# ===================================================================
+# Decisions for the operand-pattern catalogue (task A9).
+#
+# python/aspen_isa/catalogue.py builds candidate patterns for every
+# instruction (sweep, riscv-opcodes pseudo-ops, and the `when` patterns
+# below) and resolves each with the FIRST pattern here that applies:
+#
+#   instructions: names or globs the pattern applies to (default: all)
+#   except:       names or globs it does not apply to
+#   when:         an exact condition, in the layer's `when` language. It is
+#                 also added as a candidate for every instruction it applies to.
+#   covers:       sweep labels or sources it resolves, with globs: x0:<field>,
+#                 zero:<immediate>, eq:<a>=<b>, special:<field>=<what>,
+#                 riscv-opcodes:<pseudo-op>
+#   kind:         variant   proposed layer variant (tags, remove_tags, set, add_implicit)
+#                 rule      handled by a global layer rule (rule: name)
+#                 hint      HINT encoding; executes as the base instruction
+#                 reserved  reserved encoding, illegal
+#                 none      no timing effect identified
+#                 review    needs a decision against pacino's decode and rename
+#   source:       where the pattern comes from
+#
+# Entries whose witness word decodes as another instruction are resolved
+# automatically (kind `encoding`), and those that decode as nothing are
+# `reserved`. Proposed tags that the layer does not declare yet are listed
+# by `catalogue --check`; A4 adds them to the layer vocabulary.
+#
+# This file is a first cut written from the ISA manual and assembly manual.
+# The review against pacino's decode and rename RTL is part of A9.
+
+format: 1
+
+sources:
+  isa-manual: "riscv/riscv-isa-manual 8bb925f2dda1d7fa7c9a80537d50062f6cc5cebe: src/unpriv/rv32.adoc (RV32I HINT table), rv64.adoc (RV64I HINT table), zca.adoc (RVC HINTs)"
+  asm-manual: "riscv-non-isa/riscv-asm-manual 9d993086319f068813de0c725aa56fa6c21a5409: src/asm-manual.adoc (standard and CSR pseudoinstructions)"
+  riscv-opcodes: "pseudo-ops in the pinned riscv-opcodes extension files"
+
+patterns:
+
+  # ================================================================ jumps and links
+  - id: jal_call
+    instructions: [jal]
+    when: {rd: [x1, x5]}
+    kind: variant
+    tags: [call]
+    source: ["asm-manual:jal offset"]
+  - id: jal_jump
+    instructions: [jal]
+    when: {rd: x0}
+    kind: rule
+    rule: discard_rd_x0
+    tags: [no_dest]
+    source: ["asm-manual:j", "riscv-opcodes:j"]
+    note: Plain jump; the entry's jump tag plus no_dest.
+  - id: jalr_call
+    instructions: [jalr]
+    when: {rd: [x1, x5], rs1: {not: [x1, x5]}}
+    kind: variant
+    tags: [call]
+    source: ["isa-manual:RAS hints table"]
+  - id: jalr_call_same_link
+    instructions: [jalr]
+    when: {rd: [x1, x5], rs1: {eq: rd}}
+    kind: variant
+    tags: [call]
+    source: ["isa-manual:RAS hints table"]
+  - id: jalr_coroutine
+    instructions: [jalr]
+    when: {rd: [x1, x5], rs1: {all: [[x1, x5], {ne: rd}]}}
+    kind: variant
+    tags: [return, call]
+    source: ["isa-manual:RAS hints table"]
+  - id: jalr_return
+    instructions: [jalr]
+    when: {rd: {not: [x1, x5]}, rs1: [x1, x5]}
+    kind: variant
+    tags: [return]
+    source: ["isa-manual:RAS hints table", "asm-manual:ret"]
+  - id: jalr_ret
+    instructions: [jalr]
+    covers: ["riscv-opcodes:ret"]
+    kind: variant
+    tags: [return]
+    note: ret is jalr x0, 0(x1); jalr_return covers every offset.
+  - id: jalr_link_regs
+    instructions: [jalr]
+    covers: ["x0:rs1", "eq:*", "zero:imm12", "riscv-opcodes:jr"]
+    kind: none
+    note: jalr from x0 is an absolute jump to the immediate; jr has no link.
+
+  # ================================================================ CSRs
+  - id: csr_read_only
+    instructions: [csrrs, csrrc]
+    when: {rs1: x0}
+    kind: variant
+    remove_tags: [csr_write]
+    set: {serialize: none}
+    source: ["asm-manual:csrr rd, csr", "riscv-opcodes:csrr"]
+  - id: csr_read_only_imm
+    instructions: [csrrsi, csrrci]
+    when: {zimm5: 0}
+    kind: variant
+    remove_tags: [csr_write]
+    set: {serialize: none}
+    source: ["asm-manual:csrr"]
+  - id: csr_write_only
+    instructions: [csrrw, csrrwi]
+    when: {rd: x0}
+    kind: variant
+    remove_tags: [csr_read]
+    tags: [no_dest]
+    source: ["asm-manual:csrw csr, rs", "riscv-opcodes:csrw"]
+    note: csrrw with rd=x0 does not read the CSR, so it has no read side effects.
+  - id: csr_counters
+    instructions: [csrrs, csrrc, csrrsi, csrrci, csrrw, csrrwi]
+    when: {csr: {csr_class: counters}}
+    kind: variant
+    tags: [counter_read]
+    source: ["asm-manual:rdcycle, rdtime, rdinstret"]
+  - id: csr_fp_state_write
+    instructions: [csrrs, csrrc]
+    when: {csr: {csr_class: fp_state}, rs1: {not: x0}}
+    kind: variant
+    set: {serialize: rename}
+    source: ["asm-manual:fscsr, fsrm, fsflags"]
+  - id: csr_fp_state_write_rw
+    instructions: [csrrw, csrrwi]
+    when: {csr: {csr_class: fp_state}}
+    kind: variant
+    set: {serialize: rename}
+    source: ["asm-manual:fscsr, fsrm, fsflags, fsrmi, fsflagsi"]
+  - id: csr_fp_state_write_imm
+    instructions: [csrrsi, csrrci]
+    when: {csr: {csr_class: fp_state}, zimm5: {not: 0}}
+    kind: variant
+    set: {serialize: rename}
+  - id: csr_vector_state_write
+    instructions: [csrrs, csrrc]
+    when: {csr: {csr_class: vector_state}, rs1: {not: x0}}
+    kind: variant
+    set: {serialize: rename}
+  - id: csr_vector_state_write_rw
+    instructions: [csrrw, csrrwi]
+    when: {csr: {csr_class: vector_state}}
+    kind: variant
+    set: {serialize: rename}
+  - id: csr_translation_write_rw
+    instructions: [csrrw, csrrwi]
+    when: {csr: {csr_class: translation}}
+    kind: variant
+    set: {serialize: flush}
+  - id: csr_translation_write
+    instructions: [csrrs, csrrc]
+    when: {csr: {csr_class: translation}, rs1: {not: x0}}
+    kind: variant
+    set: {serialize: flush}
+  - id: csr_read_only_space
+    instructions: [csrrw, csrrwi]
+    when: {csr: {mask: 3072, value: 3072}}
+    kind: reserved
+    source: ["isa-manual:priv CSR address map"]
+    note: CSR addresses 0xC00-0xFFF are read-only; writing one raises an illegal-instruction exception.
+  - id: csr_named_pseudo_ops
+    instructions: [csrr*]
+    covers: ["riscv-opcodes:fr*", "riscv-opcodes:fs*", "riscv-opcodes:rd*"]
+    kind: none
+    source: ["asm-manual:CSR pseudoinstructions"]
+    note: frflags, fsrm, rdcycle and friends; covered by csr_read_only, csr_counters and the fp_state patterns.
+  - id: csr_misc
+    instructions: [csrr*]
+    covers: ["x0:rs1", "zero:zimm5"]
+    kind: none
+
+  # ================================================================ AMOs and LR/SC
+  - id: amo_acquire
+    instructions: ["amo*", "lr_*", "sc_*"]
+    covers: ["special:aq=1"]
+    kind: variant
+    tags: [acquire]
+  - id: amo_release
+    instructions: ["amo*", "lr_*", "sc_*"]
+    covers: ["special:rl=1"]
+    kind: variant
+    tags: [release]
+  - id: amoswap_store_like
+    instructions: [amoswap_w, amoswap_d]
+    when: {rd: x0}
+    kind: variant
+    tags: [no_dest, store_like]
+    note: Result discarded, so an atomic store; no load data to wait for.
+  - id: amo_load_like
+    instructions: [amoor_w, amoor_d, amoadd_w, amoadd_d, amoxor_w, amoxor_d]
+    covers: ["x0:rs2"]
+    kind: variant
+    tags: [load_like]
+    note: Memory is unchanged, so an atomic load.
+  - id: amo_store_zero
+    instructions: [amoand_w, amoand_d, amoswap_w, amoswap_d]
+    covers: ["x0:rs2"]
+    kind: none
+    note: Atomic store of zero.
+  - id: amo_minmax_zero
+    instructions: ["amomax*", "amomin*"]
+    covers: ["x0:rs2"]
+    kind: none
+  - id: amo_misc
+    instructions: ["amo*", "lr_*", "sc_*"]
+    covers: ["x0:rs1", "x0:rs2", "eq:*"]
+    kind: none
+    note: sc of x0 stores zero.
+
+  # ================================================================ destination x0
+  - id: rd_x0
+    covers: ["x0:rd"]
+    except: ["c_*"]
+    kind: rule
+    rule: discard_rd_x0
+    tags: [no_dest]
+    note: Global layer rule. Loads, AMOs, CSR accesses and jumps still execute; most other rd=x0 encodings are HINTs.
+
+  # ================================================================ integer immediates
+  - id: imm_move
+    instructions: [addi, ori, xori, slli, srli, srai, rori]
+    covers: ["zero:imm12", "zero:shamtd"]
+    kind: variant
+    tags: [move]
+    source: ["asm-manual:mv rd, rs", "riscv-opcodes:mv"]
+  - id: imm_sign_extend
+    instructions: [addiw, slliw, srliw, sraiw, roriw]
+    covers: ["zero:imm12", "zero:shamtw"]
+    kind: variant
+    tags: [sign_extend]
+    source: ["asm-manual:sext.w", "riscv-opcodes:sext_w"]
+  - id: andi_zero
+    instructions: [andi]
+    covers: ["zero:imm12"]
+    kind: variant
+    tags: [zero_idiom, constant]
+  - id: andi_all_ones
+    instructions: [andi]
+    when: {imm12: 4095}
+    kind: variant
+    tags: [move]
+    note: andi rd, rs, -1
+  - id: andi_zext_b
+    instructions: [andi]
+    when: {imm12: 255}
+    kind: variant
+    tags: [zero_extend]
+    source: ["asm-manual:zext.b", "riscv-opcodes:zext_b"]
+  - id: ori_all_ones
+    instructions: [ori]
+    when: {imm12: 4095}
+    kind: variant
+    tags: [constant]
+    note: ori rd, rs, -1 is all ones whatever rs is.
+  - id: xori_not
+    instructions: [xori]
+    when: {imm12: 4095}
+    kind: none
+    source: ["asm-manual:not rd, rs"]
+  - id: sltiu_seqz
+    instructions: [sltiu]
+    when: {imm12: 1}
+    kind: none
+    source: ["asm-manual:seqz rd, rs", "riscv-opcodes:seqz"]
+  - id: imm_from_x0_constant
+    instructions: [addi, ori, xori, addiw, slti, sltiu, bseti, binvi]
+    covers: ["x0:rs1"]
+    kind: variant
+    tags: [constant]
+    source: ["asm-manual:li"]
+  - id: imm_from_x0_zero
+    instructions: [andi, slli, srli, srai, slliw, srliw, sraiw, rori, roriw, bclri, bexti, slli_uw]
+    covers: ["x0:rs1"]
+    kind: variant
+    tags: [zero_idiom, constant]
+  - id: sltiu_zero
+    instructions: [sltiu]
+    covers: ["zero:imm12"]
+    kind: variant
+    tags: [zero_idiom, constant]
+    note: Nothing is unsigned-less-than zero.
+  - id: imm_misc
+    instructions: [slti, sltiu, bclri, bseti, binvi, bexti, slli_uw]
+    covers: ["zero:*"]
+    kind: none
+    note: Compare or bit operation with immediate 0; slli.uw by 0 is zext.w.
+  - id: lui_auipc
+    instructions: [lui, auipc]
+    covers: ["zero:imm20"]
+    kind: none
+    note: lui rd, 0 is a zero idiom, but lui is already tagged constant.
+
+  # ================================================================ integer register-register
+  - id: rr_move_rs2_x0
+    instructions: [add, or, xor, sub, sll, srl, sra, rol, ror, andn, rem, remu]
+    covers: ["x0:rs2"]
+    kind: variant
+    tags: [move]
+    note: rem by zero returns the dividend.
+  - id: rr_move_rs1_x0
+    instructions: [add, or, xor, add_uw, sh1add, sh2add, sh3add, sh1add_uw, sh2add_uw, sh3add_uw]
+    covers: ["x0:rs1"]
+    kind: variant
+    tags: [move]
+    note: add.uw and shNadd(.uw) with rs1=x0 add zero to rs2.
+  - id: rr_sign_extend
+    instructions: [addw, subw, sllw, srlw, sraw, rolw, rorw]
+    covers: ["x0:rs2"]
+    kind: variant
+    tags: [sign_extend]
+  - id: rr_sign_extend_rs1
+    instructions: [addw]
+    covers: ["x0:rs1"]
+    kind: variant
+    tags: [sign_extend]
+  - id: add_uw_zext_w
+    instructions: [add_uw]
+    covers: ["x0:rs2"]
+    kind: variant
+    tags: [zero_extend]
+    source: ["asm-manual:zext.w", "riscv-opcodes:zext_w"]
+  - id: rr_zero_rs2_x0
+    instructions: [and, mul, mulh, mulhu, mulhsu, mulw, czero_eqz, sltu, minu]
+    covers: ["x0:rs2"]
+    kind: variant
+    tags: [zero_idiom, constant]
+    note: czero.eqz with rs2=x0 is always zero; nothing is unsigned-less-than zero.
+  - id: unsigned_minmax_x0
+    instructions: [maxu]
+    covers: ["x0:rs1", "x0:rs2"]
+    kind: variant
+    tags: [move]
+  - id: minu_x0
+    instructions: [minu]
+    covers: ["x0:rs1"]
+    kind: variant
+    tags: [zero_idiom, constant]
+  - id: rr_zero_rs1_x0
+    instructions: [and, sll, srl, sra, sllw, srlw, sraw, mul, mulh, mulhu, mulhsu, mulw, andn, rol, ror, rolw,
+                   rorw, bclr, bext, rem, remu, remw, remuw, czero_eqz, czero_nez]
+    covers: ["x0:rs1"]
+    kind: variant
+    tags: [zero_idiom, constant]
+    note: 0 rem x is 0, including x = 0.
+  - id: czero_nez_move
+    instructions: [czero_nez]
+    covers: ["x0:rs2"]
+    kind: variant
+    tags: [move]
+  - id: div_by_zero
+    instructions: [div, divu, divw, divuw]
+    covers: ["x0:rs2"]
+    kind: variant
+    tags: [constant]
+    note: Division by zero returns all ones.
+  - id: remw_by_zero
+    instructions: [remw, remuw]
+    covers: ["x0:rs2"]
+    kind: variant
+    tags: [sign_extend]
+    note: Returns the dividend, sign-extended from 32 bits.
+  - id: orn_all_ones
+    instructions: [orn]
+    covers: ["x0:rs2"]
+    kind: variant
+    tags: [constant]
+  - id: rr_same_zero
+    instructions: [xor, sub, subw, slt, sltu, andn, rem, remu, remw, remuw, czero_nez]
+    covers: ["eq:rs1=rs2"]
+    kind: variant
+    tags: [zero_idiom, constant]
+    source: ["isa-manual:xor rd, rs, rs"]
+    note: x rem x is 0, including 0 rem 0.
+  - id: rr_same_move
+    instructions: [and, or, max, maxu, min, minu, czero_eqz]
+    covers: ["eq:rs1=rs2"]
+    kind: variant
+    tags: [move]
+  - id: rr_same_all_ones
+    instructions: [orn, xnor]
+    covers: ["eq:rs1=rs2"]
+    kind: variant
+    tags: [constant]
+  - id: rr_misc
+    instructions: [add, addw, sub, subw, sll, srl, sra, sllw, srlw, sraw, slt, sltu, mul, mulh, mulhu, mulhsu, mulw,
+                   div, divu, divw, divuw, xnor, orn, max, maxu, min, minu, rol, ror, rolw, rorw, bset, binv,
+                   bclr, bext, sh1add, sh2add, sh3add, sh1add_uw, sh2add_uw, sh3add_uw, add_uw]
+    covers: ["x0:*", "eq:*"]
+    kind: none
+    source: ["asm-manual:neg, snez, sltz, sgtz"]
+  - id: unary_zero_input
+    instructions: [clz, ctz, cpop, clzw, ctzw, cpopw]
+    covers: ["x0:rs1"]
+    kind: variant
+    tags: [constant]
+  - id: unary_zero_output
+    instructions: [sext_b, sext_h, zext_h, rev8, orc_b]
+    covers: ["x0:rs1"]
+    kind: variant
+    tags: [zero_idiom, constant]
+
+  # ================================================================ HINTs (RV32I/RV64I tables)
+  - id: ntl_hints
+    instructions: [add, c_add]
+    covers: ["riscv-opcodes:ntl_*", "riscv-opcodes:c_ntl_*"]
+    kind: hint
+    tags: [ntl]
+    source: ["isa-manual:RV32I HINT table (NTL)"]
+    note: Non-temporal locality hint for the next memory access (rs2 = x2..x5 selects P1, PALL, S1, ALL).
+  - id: nop
+    instructions: [addi]
+    when: {rd: x0, rs1: x0, imm12: 0}
+    kind: variant
+    tags: [nop]
+    source: ["asm-manual:nop", "riscv-opcodes:nop"]
+  - id: semihost_markers
+    instructions: [slli, srai]
+    when: {rd: x0, rs1: x0}
+    kind: hint
+    source: ["isa-manual:RV32I HINT table (semihosting markers)"]
+
+  # ================================================================ branches
+  - id: branch_always
+    instructions: [beq, bge, bgeu]
+    covers: ["eq:rs1=rs2"]
+    kind: variant
+    tags: [always_taken]
+  - id: branch_never
+    instructions: [bne, blt, bltu]
+    covers: ["eq:rs1=rs2"]
+    kind: variant
+    tags: [never_taken]
+  - id: branch_zero
+    instructions: [beq, bne, blt, bge, bltu, bgeu]
+    covers: ["x0:rs1", "x0:rs2"]
+    kind: variant
+    tags: [compare_zero]
+    source: ["asm-manual:beqz, bnez, blez, bgez, bltz, bgtz", "riscv-opcodes:beqz"]
+  - id: branch_offsets
+    covers: ["zero:bimm12", "zero:jimm20"]
+    kind: none
+    note: A branch or jump to itself.
+
+  # ================================================================ loads and stores
+  - id: stack_access
+    instructions: [lb, lbu, lh, lhu, lw, lwu, ld, sb, sh, sw, sd, flw, fld, flh, fsw, fsd, fsh]
+    when: {rs1: x2}
+    kind: variant
+    tags: [stack_access]
+  - id: mem_misc
+    instructions: [lb, lbu, lh, lhu, lw, lwu, ld, sb, sh, sw, sd, flw, fld, flh, fsw, fsd, fsh, "hlv*", "hsv*",
+                   "cbo_*", "prefetch_*"]
+    covers: ["x0:*", "zero:*", "eq:*"]
+    kind: none
+    note: Absolute address from x0, zero offset, a store of zero, or a store of its own address.
+
+  # ================================================================ fences and system
+  - id: fence_tso
+    instructions: [fence]
+    when: {fm: 8, pred: 3, succ: 3}
+    kind: variant
+    tags: [tso]
+    source: ["riscv-opcodes:fence_tso"]
+  - id: fence_no_order
+    instructions: [fence]
+    covers: ["special:pred=0", "special:succ=0"]
+    kind: hint
+    tags: [nop]
+    source: ["isa-manual:RV32I HINT table (fence with pred=0 or succ=0)"]
+    note: Orders nothing; pause (pred=W, succ=0) is its own instruction.
+  - id: fence_tso_fm
+    instructions: [fence]
+    covers: ["special:fm=tso"]
+    kind: review
+    note: fm=8 with sets other than rw,rw is reserved for future use.
+  - id: fence_misc
+    instructions: [fence, fence_i]
+    covers: ["x0:*", "zero:*"]
+    kind: none
+    note: fence rd and rs1 are reserved for future use; fence.i imm12 likewise.
+  - id: tlb_all_addresses
+    instructions: [sfence_vma, sinval_vma, hfence_vvma, hinval_vvma, hfence_gvma, hinval_gvma]
+    covers: ["x0:rs1"]
+    kind: variant
+    tags: [tlb_all_addresses]
+  - id: tlb_all_asids
+    instructions: [sfence_vma, sinval_vma, hfence_vvma, hinval_vvma]
+    covers: ["x0:rs2"]
+    kind: variant
+    tags: [tlb_all_asids]
+  - id: tlb_all_vmids
+    instructions: [hfence_gvma, hinval_gvma]
+    covers: ["x0:rs2"]
+    kind: variant
+    tags: [tlb_all_vmids]
+  - id: tlb_same
+    instructions: [sfence_vma, sinval_vma, "hfence_*", "hinval_*"]
+    covers: ["eq:*"]
+    kind: none
+
+  # ================================================================ may-be-operations
+  - id: mop_writes_zero
+    instructions: ["mop_r_*", "mop_rr_*"]
+    when: {}
+    kind: variant
+    tags: [zero_idiom, constant]
+    source: ["isa-manual:Zimop"]
+    note: Entry-level tags. Each MOP writes zero to rd until an extension redefines it.
+  - id: mop_misc
+    instructions: ["mop_r_*", "mop_rr_*"]
+    covers: ["x0:*", "eq:*"]
+    kind: none
+  - id: c_mop_nop
+    instructions: ["c_mop_*"]
+    when: {}
+    kind: variant
+    tags: [nop]
+    source: ["isa-manual:Zcmop"]
+
+  # ================================================================ scalar floating point
+  - id: fp_dynamic_rm
+    covers: ["special:rm=dyn"]
+    kind: variant
+    tags: [dyn_rm]
+  - id: fp_reserved_rm
+    covers: ["special:rm=reserved"]
+    kind: reserved
+    note: Rounding modes 5 and 6 are reserved.
+  - id: fsgnj_move
+    instructions: [fsgnj_s, fsgnj_d]
+    covers: ["eq:rs1=rs2"]
+    kind: variant
+    tags: [move]
+    source: ["asm-manual:fmv.s, fmv.d", "riscv-opcodes:fmv_d"]
+  - id: fsgnjn_fsgnjx_same
+    instructions: [fsgnjn_s, fsgnjn_d, fsgnjx_s, fsgnjx_d]
+    covers: ["eq:rs1=rs2"]
+    kind: none
+    source: ["asm-manual:fneg, fabs", "riscv-opcodes:fneg_d"]
+  - id: fp_from_x0
+    instructions: [fmv_w_x, fmv_d_x, fmv_h_x, "fcvt_s_w*", "fcvt_s_l*", "fcvt_d_w*", "fcvt_d_l*"]
+    covers: ["x0:rs1"]
+    kind: variant
+    tags: [zero_idiom, constant]
+    note: +0.0 from x0.
+  - id: fp_misc
+    instructions: ["f*"]
+    covers: ["eq:*", "x0:*", "zero:*"]
+    kind: none
+    note: Same-register FP operations still depend on NaN handling and flags.
+
+  # ================================================================ compressed
+  - id: c_stack
+    instructions: [c_lwsp, c_ldsp, c_swsp, c_sdsp, c_fldsp, c_fsdsp, c_addi16sp, c_addi4spn]
+    when: {}
+    kind: variant
+    tags: [stack_access]
+    note: Entry-level tags; these always use sp.
+  - id: c_reserved_zero_imm
+    instructions: [c_addi4spn, c_addi16sp, c_lui]
+    covers: ["zero:c_nzuimm10", "zero:c_nzimm10", "zero:c_nzimm18"]
+    kind: reserved
+    source: ["isa-manual:zca.adoc"]
+  - id: c_nop
+    instructions: [c_nop]
+    when: {}
+    kind: variant
+    tags: [nop]
+  - id: c_nop_imm
+    instructions: [c_nop]
+    covers: ["zero:*"]
+    kind: none
+    note: c.nop with imm 0 is the nop itself; non-zero immediates are HINTs.
+  - id: c_reserved_x0
+    instructions: [c_jr, c_lwsp, c_ldsp, c_addiw]
+    covers: ["x0:*"]
+    kind: reserved
+    source: ["isa-manual:zca.adoc"]
+    note: c.jr with rs1=x0, c.lwsp/c.ldsp with rd=x0 and c.addiw with rd=x0 are reserved. The reference decoder does not reject them yet.
+  - id: c_hints
+    instructions: [c_li, c_lui, c_slli, c_srli, c_srai, c_mv, c_add, c_addi]
+    covers: ["zero:*", "x0:*"]
+    kind: hint
+    source: ["isa-manual:zca.adoc RVC HINTs"]
+    note: c.li/c.lui/c.mv/c.add with rd=x0, c.slli with rd=x0 or shamt 0, c.srli/c.srai with shamt 0, c.addi with imm 0, c.nop with imm != 0.
+  - id: c_andi_zero
+    instructions: [c_andi]
+    covers: ["zero:c_imm6"]
+    kind: variant
+    tags: [zero_idiom, constant]
+  - id: c_misc
+    instructions: ["c_*"]
+    covers: ["zero:*", "x0:*", "eq:*"]
+    kind: none
+    note: Compressed entries inherit their base's variants through expands_to.
+
+  # ================================================================ vector
+  - id: v_masked
+    instructions: ["v*"]
+    covers: ["special:vm=masked"]
+    kind: variant
+    tags: [masked]
+    add_implicit: [{reg: v0, role: src}]
+  - id: v_masked_vd_v0_allowed
+    instructions: ["vms*", "vmf*", "vred*", "vfred*", "vwred*", "vfwred*"]
+    except: [vmsbf_m, vmsif_m, vmsof_m]
+    covers: ["special:vm=masked_vd_v0"]
+    kind: none
+    source: ["isa-manual:vector-common.adoc norm:vreg_vmask_rsv"]
+    note: The destination may overlap v0 when it is written with a mask value or a reduction's scalar result.
+  - id: v_masked_vd_v0
+    instructions: ["v*"]
+    covers: ["special:vm=masked_vd_v0"]
+    kind: reserved
+    source: ["isa-manual:vector-common.adoc norm:vreg_vmask_rsv"]
+    note: A masked instruction's destination group cannot overlap the mask register v0.
+  - id: v_segment
+    instructions: ["vl*", "vs*"]
+    covers: ["special:nf=segment"]
+    kind: variant
+    tags: [segment]
+  - id: v_same_zero
+    instructions: [vxor_vv, vsub_vv, vssub_vv, vssubu_vv, vmsne_vv, vmslt_vv, vmsltu_vv, vmxor_mm, vmandn_mm]
+    covers: ["eq:vs1=vs2"]
+    kind: variant
+    tags: [zero_idiom]
+    source: ["asm-manual:vmclr.m, vmsltu.vi 0"]
+  - id: v_same_ones
+    instructions: [vmseq_vv, vmsle_vv, vmsleu_vv, vmxnor_mm, vmorn_mm]
+    covers: ["eq:vs1=vs2"]
+    kind: variant
+    tags: [ones_idiom]
+    source: ["asm-manual:vmset.m, vmsgeu.vi 0"]
+  - id: v_same_move
+    instructions: [vand_vv, vor_vv, vmax_vv, vmaxu_vv, vmin_vv, vminu_vv, vmand_mm, vmor_mm, vfsgnj_vv]
+    covers: ["eq:vs1=vs2"]
+    kind: variant
+    tags: [move]
+    source: ["asm-manual:vmmv.m"]
+  - id: v_scalar_zero_move
+    instructions: [vadd_vx, vsub_vx, vor_vx, vxor_vx, vsll_vx, vsrl_vx, vsra_vx, vssrl_vx, vssra_vx, vsadd_vx,
+                   vsaddu_vx, vssub_vx, vssubu_vx, vror_vx, vrol_vx, vslideup_vx, vslidedown_vx, vandn_vx]
+    covers: ["x0:rs1"]
+    kind: variant
+    tags: [move]
+  - id: v_scalar_zero_zero
+    instructions: [vand_vx, vmul_vx, vmulh_vx, vmulhu_vx, vmulhsu_vx, vmv_v_x]
+    covers: ["x0:rs1"]
+    kind: variant
+    tags: [zero_idiom]
+  - id: v_imm_zero_move
+    instructions: [vadd_vi, vor_vi, vxor_vi, vsll_vi, vsrl_vi, vsra_vi, vssrl_vi, vssra_vi, vsadd_vi, vsaddu_vi,
+                   vror_vi, vslideup_vi, vslidedown_vi]
+    covers: ["zero:simm5", "zero:zimm5"]
+    kind: variant
+    tags: [move]
+  - id: v_imm_zero_zero
+    instructions: [vand_vi, vmv_v_i]
+    covers: ["zero:simm5"]
+    kind: variant
+    tags: [zero_idiom]
+  - id: v_widen_narrow_zero
+    instructions: [vwadd_vx, vwaddu_vx, vwsub_vx, vwsubu_vx, vnsrl_wx, vnsra_wx, vnsrl_wi, vnsra_wi]
+    covers: ["x0:rs1", "zero:simm5", "zero:zimm5"]
+    kind: none
+    source: ["asm-manual:vwcvt.x.x.v, vncvt.x.x.w"]
+    note: Widening or narrowing conversion.
+  - id: vset_avl_rs1
+    instructions: [vsetvli]
+    when: {rs1: {not: x0}}
+    kind: variant
+    tags: [vl_from_rs1]
+  - id: vset_vlmax
+    instructions: [vsetvli, vsetvl]
+    when: {rs1: x0, rd: {not: x0}}
+    kind: variant
+    tags: [vl_max]
+  - id: vset_keep_vl
+    instructions: [vsetvli, vsetvl]
+    when: {rs1: x0, rd: x0}
+    kind: variant
+    tags: [vl_keep]
+  - id: vset_misc
+    instructions: [vsetvli, vsetivli, vsetvl]
+    covers: ["x0:*", "zero:*"]
+    kind: none
+  - id: v_whole_register_move
+    instructions: [vmv1r_v, vmv2r_v, vmv4r_v, vmv8r_v, vmv_v_v]
+    when: {}
+    kind: variant
+    tags: [move]
+  - id: v_misc
+    instructions: ["v*"]
+    covers: ["x0:*", "zero:*", "eq:*"]
+    kind: none
+    note: No static effect identified; vector compares on FP sources depend on NaNs.
+
+  # ================================================================ privileged and remaining
+  - id: wrs_misc
+    instructions: [wrs_nto, wrs_sto, ecall, ebreak, mret, sret, wfi, "sfence_*"]
+    covers: ["x0:*", "zero:*"]
+    kind: none

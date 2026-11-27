@@ -5,9 +5,9 @@
 # ===================================================================
 # AspenADL layer for RVA23S64: microarchitecture data on top of riscv-opcodes.
 #
-# A2 status: vocabularies plus example entries that exercise every schema
-# feature. A4 (scalar), A7 (vector) and A9 (operand-pattern catalogue)
-# fill in the rest. The fu_classes, tags and attribute values are a first
+# Status: vocabularies plus example entries that exercise every schema
+# feature (A2). Every entry agrees with the operand-pattern catalogue (A9,
+# isa/catalogue). A4 (scalar) and A7 (vector) fill in the rest. The fu_classes, tags and attribute values are a first
 # cut, to be aligned with pacino's decode.
 #
 # Latencies are not here: units specify them in Sparta parameters.
@@ -41,9 +41,14 @@ tags:
   no_dest: Destination is x0; nothing is written
   nop: Does nothing architecturally
   stack_access: Memory access based on sp (x2)
+  sign_extend: Result is the source sign-extended from 32 bits (sext.w and its forms)
+  zero_extend: Result is the source zero-extended (zext.b, zext.w and their forms)
+  ones_idiom: Result is all ones whatever the source values (vector masks)
+  ntl: Non-temporal locality hint for the next memory access
   # Control flow
   cond_branch: Conditional branch
   always_taken: Conditional branch whose condition is always true
+  never_taken: Conditional branch whose condition is always false
   compare_zero: Branch comparing against x0
   jump: Unconditional jump
   direct: Target from the encoding
@@ -57,10 +62,14 @@ tags:
   acquire: Acquire ordering
   release: Release ordering
   memory_only: Fence orders memory accesses only, not I/O
+  tso: Fence with total-store-order semantics (fence.tso)
+  load_like: Atomic that leaves memory unchanged; behaves as an atomic load
+  store_like: Atomic whose result is discarded; behaves as an atomic store
   store_load: Fence orders earlier stores before later loads
   tlb_flush: Invalidates translations
   tlb_all_addresses: Applies to every address
   tlb_all_asids: Applies to every ASID
+  tlb_all_vmids: Applies to every VMID
   prefetch: Prefetch hint
   # FP
   dyn_rm: Rounding mode comes from frm
@@ -190,6 +199,13 @@ instructions:
       rd: {role: dest, file: x}
       rs1: {role: src, file: x}
       rs2: {role: src, file: x}
+    variants:
+      - name: zero_rs1
+        when: {rs1: x0}
+        add_tags: [zero_idiom, constant]
+      - name: zero_rs2
+        when: {rs2: x0}
+        add_tags: [zero_idiom, constant]
 
   div:
     fu_class: div
@@ -198,6 +214,10 @@ instructions:
       rd: {role: dest, file: x}
       rs1: {role: src, file: x}
       rs2: {role: src, file: x}
+    variants:
+      - name: by_zero
+        when: {rs2: x0}
+        add_tags: [constant]
 
   # ---------------------------------------------------------------- memory
   ld:
@@ -239,6 +259,9 @@ instructions:
         add_tags: [acquire]
       - when: {rl: 1}
         add_tags: [release]
+      - name: atomic_load
+        when: {rs2: x0}
+        add_tags: [load_like]
 
   fence:
     fu_class: fence
@@ -257,6 +280,9 @@ instructions:
       - name: store_load
         when: {pred: {mask: 1, value: 1}, succ: {mask: 2, value: 2}}
         add_tags: [store_load]
+      - name: tso
+        when: {fm: 8, pred: 3, succ: 3}
+        add_tags: [tso]
 
   prefetch_r:
     fu_class: load
@@ -277,6 +303,9 @@ instructions:
     variants:
       - name: beqz
         when: {rs2: x0}
+        add_tags: [compare_zero]
+      - name: zero_rs1
+        when: {rs1: x0}
         add_tags: [compare_zero]
       - name: always
         when: {rs2: {eq: rs1}}
@@ -355,6 +384,9 @@ instructions:
         add_tags: [counter_read]
       - name: fp_state_write
         when: {csr: {csr_class: fp_state}, rs1: {not: x0}}
+        set: {serialize: rename}
+      - name: vector_state_write
+        when: {csr: {csr_class: vector_state}, rs1: {not: x0}}
         set: {serialize: rename}
       - name: translation_write
         when: {csr: {csr_class: translation}, rs1: {not: x0}}

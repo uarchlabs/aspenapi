@@ -3,7 +3,7 @@
 # Copyright (c) 2026 Jeff Nye, uarchlabs.com
 # SPDX-FileCopyrightText: 2026 Jeff Nye <jeff@uarchlabs.com>
 # ===================================================================
-"""Command line: python3 -m aspen_isa {validate,ids,list,merge,decode,profile,spike} ..."""
+"""Command line: python3 -m aspen_isa {validate,ids,list,merge,decode,profile,spike,catalogue} ..."""
 
 from __future__ import annotations
 
@@ -14,6 +14,7 @@ from pathlib import Path
 
 import yaml
 
+from . import catalogue as cat
 from . import decode as dec
 from . import evaluate as ev
 from . import ids as idreg
@@ -29,6 +30,8 @@ DEFAULTS = {
     "layer": ROOT / "isa" / "layer" / "rva23s64.yaml",
     "ids": ROOT / "isa" / "ids.yaml",
     "opcodes": ROOT / "ext" / "riscv-opcodes",
+    "patterns": ROOT / "isa" / "catalogue" / "patterns.yaml",
+    "catalogue": ROOT / "isa" / "catalogue" / "rva23s64.yaml",
 }
 
 
@@ -173,6 +176,38 @@ def cmd_spike(args) -> int:
     return rc
 
 
+def cmd_catalogue(args) -> int:
+    prof, iset = _iset(args)
+    layer = lay.load_yaml(args.layer_file)
+    built = cat.build(iset, cat.load_patterns(args.patterns), layer)
+    if args.show:
+        for name in args.show:
+            for e in built["instructions"].get(name, []):
+                print(f"{name}: {json.dumps(e)}")
+        return 0
+    if args.write:
+        cat.dump(built, args.catalogue)
+        print(f"wrote {args.catalogue}")
+    errors: list[str] = [f"unresolved: {u}" for u in cat.unresolved(built)]
+    warnings: list[str] = []
+    if args.check and not args.write:
+        if not args.catalogue.exists():
+            errors.append(f"{args.catalogue} is missing; run: python3 -m aspen_isa catalogue --write")
+        elif yaml.safe_load(args.catalogue.read_text(encoding="utf-8")) != json.loads(json.dumps(built)):
+            errors.append(f"{args.catalogue.name} is out of date; run: python3 -m aspen_isa catalogue --write")
+    db = mrg.build(layer, iset, idreg.load(args.ids), prof, args.opcodes)
+    problems, checked = cat.check_layer(built, iset, db)
+    (errors if args.strict_layer else warnings).extend(f"layer: {p}" for p in problems)
+    new_tags = cat.undeclared_tags(built, layer)
+    rc = _report(errors, warnings, args.quiet)
+    summary = ", ".join(f"{k} {v}" for k, v in built["summary"].items() if v)
+    print(f"catalogue: {summary}")
+    print(f"layer check: {checked} entries checked against layer data, {len(problems)} mismatches")
+    if new_tags:
+        print(f"tags proposed but not yet in the layer: {', '.join(new_tags)}")
+    return rc
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(prog="aspen_isa", description="AspenADL ISA layer tools")
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -216,6 +251,18 @@ def main(argv=None) -> int:
     _common(sp)
     sp.add_argument("encoding_h", type=Path)
     sp.set_defaults(fn=cmd_spike)
+
+    c = sub.add_parser("catalogue", help="build or check the operand-pattern catalogue (A9)")
+    _common(c)
+    c.add_argument("--layer-file", type=Path, default=DEFAULTS["layer"])
+    c.add_argument("--patterns", type=Path, default=DEFAULTS["patterns"])
+    c.add_argument("--catalogue", type=Path, default=DEFAULTS["catalogue"])
+    c.add_argument("--write", action="store_true", help="regenerate the catalogue file")
+    c.add_argument("--check", action="store_true", help="fail if the catalogue file is out of date")
+    c.add_argument("--strict-layer", action="store_true", help="treat layer mismatches as errors")
+    c.add_argument("--show", nargs="+", metavar="NAME", help="print the entries for these instructions")
+    c.add_argument("-q", "--quiet", action="store_true", help="hide warnings")
+    c.set_defaults(fn=cmd_catalogue)
 
     args = ap.parse_args(argv)
     try:

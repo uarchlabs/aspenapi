@@ -66,6 +66,9 @@ jobs:
       - name: Encodings match ua-spike
         run: PYTHONPATH=python python -m aspen_isa spike "$SPIKE_ENCODING_H"
 
+      - name: Operand-pattern catalogue is current and agrees with the layer
+        run: PYTHONPATH=python python -m aspen_isa catalogue --check --strict-layer
+
       - name: Merged database
         run: PYTHONPATH=python python -m aspen_isa merge -o build/rva23s64.db.json
 
